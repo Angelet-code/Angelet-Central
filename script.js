@@ -1,12 +1,12 @@
 const apps = [
   {
-    name: "SchemaLab",
+    name: "Schema Lab",
     url: "https://angelet-code.github.io/SchemaLab/",
     logo: "assets/logos/schema-lab.png",
     icon: "icon-schema",
     short: "SL",
     description:
-      "Laboratorio visual para pensar, ordenar y convertir esquemas en algo que se pueda tocar."
+      "Analiza circuitos eléctricos y ayuda a entender sus componentes, conexiones y función dentro del esquema."
   },
   {
     name: "Mix Revision",
@@ -15,7 +15,7 @@ const apps = [
     icon: "icon-mix",
     short: "MR",
     description:
-      "Herramienta de revision para mezclas: una mesa rapida donde comparar, apuntar y decidir cambios."
+      "Checklist para revisar feedback de mezclas y convertir comentarios en tareas claras de revisión."
   },
   {
     name: "EEpedia",
@@ -25,16 +25,16 @@ const apps = [
     icon: "icon-eepedia",
     short: "EE",
     description:
-      "Enciclopedia y base de consulta para reunir conocimiento sin perderte entre carpetas y notas."
+      "Información detallada sobre Empire Earth: Art of Conquest, con guías, unidades, poderes y recursos de consulta."
   },
   {
-    name: "Cuanto es lo mio",
+    name: "Cuanto es lo mío?",
     url: "https://angelet-code.github.io/Cuanto-es-lo-mio/",
     logo: "assets/logos/cuanto-es-lo-mio.jpg",
     icon: "icon-money",
     short: "$",
     description:
-      "Calculadora practica para aclarar numeros, repartos y cantidades sin abrir media docena de pesta&ntilde;as."
+      "App para dividir la cuenta pagando cada uno lo suyo, marcando productos y calculando el total por persona."
   }
 ];
 
