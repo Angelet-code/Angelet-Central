@@ -10,7 +10,7 @@ const apps = [
   },
   {
     name: "Mix Revision",
-    url: "https://github.com/Angelet-code/Mix-Revision",
+    url: "https://angelet-code.github.io/Mix-Revision/",
     logo: "assets/logos/mix-revision.png",
     icon: "icon-mix",
     short: "MR",
