@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Angelet Central</title>
+    <meta
+      name="description"
+      content="Central de aplicaciones de Angelet con estetica de inventario clasico."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell" aria-labelledby="page-title">
+      <div class="dungeon-bg" aria-hidden="true">
+        <div class="hud-strip">
+          <div class="hud-meter">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="hud-item-preview"></div>
+          <div class="hud-rupee"></div>
+          <div class="hud-life">
+            <span>LIFE</span>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+      </div>
+
+      <nav class="top-tabs" aria-label="Secciones">
+        <span class="shoulder">L</span>
+        <button class="tab ghost" type="button" aria-label="Cristales">
+          <span class="tab-gem"></span>
+        </button>
+        <button class="tab active" type="button" aria-current="page">
+          <span class="tab-bow"></span>
+          <strong>Apps</strong>
+        </button>
+        <button class="tab ghost" type="button" aria-label="Botellas">
+          <span class="tab-bottle"></span>
+        </button>
+        <span class="shoulder">R</span>
+      </nav>
+
+      <section class="inventory" aria-label="Inventario de aplicaciones">
+        <div class="inventory-grid-area">
+          <header class="brand-row">
+            <div>
+              <p class="kicker">Angelet Central</p>
+              <h1 id="page-title">Apps</h1>
+            </div>
+            <div class="mini-counter" aria-label="Aplicaciones disponibles">
+              <span id="app-count">04</span>
+            </div>
+          </header>
+
+          <div id="app-grid" class="item-grid" aria-label="Aplicaciones"></div>
+
+          <div class="lower-grid">
+            <section class="bottle-section" aria-label="Botellas">
+              <span class="section-label">Bottles</span>
+              <div class="bottle-row">
+                <button class="bottle filled red" type="button" aria-label="Botella roja reservada">
+                  <span></span>
+                </button>
+                <button class="bottle filled blue" type="button" aria-label="Botella azul reservada">
+                  <span></span>
+                </button>
+                <button class="bottle filled blue pale" type="button" aria-label="Botella clara reservada">
+                  <span></span>
+                </button>
+                <button class="bottle empty" type="button" aria-label="Botella vacia reservada"></button>
+              </div>
+            </section>
+            <div class="reserve-slot" aria-hidden="true"></div>
+            <div class="reserve-slot" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <aside class="detail-panel" aria-live="polite">
+          <div class="detail-plate">
+            <div id="detail-icon" class="detail-icon" aria-hidden="true"></div>
+            <h2 id="detail-title"></h2>
+            <p id="detail-description"></p>
+            <a id="detail-link" class="open-link" href="#" target="_blank" rel="noreferrer">
+              <span>Open</span>
+              <i aria-hidden="true"></i>
+            </a>
+          </div>
+
+          <div class="wallet" aria-label="Mis rupias">
+            <span class="section-label">My Rupees</span>
+            <strong>999</strong>
+            <div class="rupee-stack" aria-hidden="true">
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <div class="footer-hints" aria-hidden="true">
+        <span><b>B</b> Close</span>
+        <span><b>A</b> Open</span>
+      </div>
+    </main>
+
+    <template id="icon-schema">
+      <svg viewBox="0 0 96 96" role="img" aria-hidden="true">
+        <path class="shadow" d="M20 22h48l10 12v40H20z" />
+        <path class="paper" d="M18 16h48l12 13v43H18z" />
+        <path class="fold" d="M66 16v14h12z" />
+        <path class="line green" d="M30 32h22" />
+        <path class="line blue" d="M30 45h34" />
+        <path class="node a" d="M29 58h13v13H29z" />
+        <path class="node b" d="M53 58h13v13H53z" />
+        <path class="join" d="M42 64h11" />
+      </svg>
+    </template>
+
+    <template id="icon-mix">
+      <svg viewBox="0 0 96 96" role="img" aria-hidden="true">
+        <path class="handle" d="M28 66 62 26l9 8-33 40z" />
+        <path class="head" d="M55 19h20l3 17-17 3z" />
+        <path class="shine" d="m62 29 7-6" />
+        <path class="knob red" d="M20 67h14v8H20z" />
+        <path class="knob blue" d="M29 56h14v8H29z" />
+        <path class="knob gold" d="M38 45h14v8H38z" />
+      </svg>
+    </template>
+
+    <template id="icon-eepedia">
+      <svg viewBox="0 0 96 96" role="img" aria-hidden="true">
+        <path class="book-shadow" d="M24 18h42c6 0 10 4 10 10v46H32c-6 0-10-4-10-10V20z" />
+        <path class="book" d="M20 14h42c6 0 10 4 10 10v46H28c-6 0-10-4-10-10V16z" />
+        <path class="spine" d="M30 14v56" />
+        <path class="ribbon" d="M57 14v22l-6-5-6 5V14z" />
+        <path class="spark" d="M48 46h12M48 56h15M38 46h4M38 56h4" />
+      </svg>
+    </template>
+
+    <template id="icon-money">
+      <svg viewBox="0 0 96 96" role="img" aria-hidden="true">
+        <path class="coin back" d="M57 20c13 0 22 10 22 25s-9 25-22 25-22-10-22-25 9-25 22-25z" />
+        <path class="coin front" d="M39 26c13 0 22 10 22 25s-9 25-22 25-22-10-22-25 9-25 22-25z" />
+        <path class="coin-line" d="M34 40h13M30 51h18M35 62h13" />
+        <path class="tiny-rupee" d="M69 53 80 64 69 81 58 64z" />
+      </svg>
+    </template>
+
+    <template id="icon-empty">
+      <svg viewBox="0 0 96 96" role="img" aria-hidden="true">
+        <circle cx="48" cy="48" r="26" />
+      </svg>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
