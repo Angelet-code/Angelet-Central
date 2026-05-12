@@ -44,7 +44,10 @@ const appCount = document.querySelector("#app-count");
 const detailIcon = document.querySelector("#detail-icon");
 const detailTitle = document.querySelector("#detail-title");
 const detailDescription = document.querySelector("#detail-description");
-const detailLink = document.querySelector("#detail-link");
+const selector = document.createElement("div");
+let activeSlot = null;
+
+selector.className = "slot-selector";
 
 const getTemplateMarkup = (id) => {
   const template = document.querySelector(`#${id}`);
@@ -67,13 +70,16 @@ const setActiveApp = (app, slot) => {
 
   if (slot) {
     slot.classList.add("is-active");
+    activeSlot = slot;
+    selector.style.width = `${slot.offsetWidth}px`;
+    selector.style.height = `${slot.offsetHeight}px`;
+    selector.style.transform = `translate3d(${slot.offsetLeft}px, ${slot.offsetTop}px, 0)`;
+    selector.classList.add("is-visible");
   }
 
   detailIcon.innerHTML = renderAppIcon(app, "detail");
   detailTitle.textContent = app.name;
   detailDescription.innerHTML = app.description;
-  detailLink.href = app.url;
-  detailLink.setAttribute("aria-label", `Abrir ${app.name}`);
 };
 
 const createSlot = (app, index) => {
@@ -106,6 +112,7 @@ const renderGrid = () => {
   }
 
   grid.appendChild(fragment);
+  grid.appendChild(selector);
   appCount.textContent = String(apps.length).padStart(2, "0");
   setActiveApp(apps[0], grid.querySelector(".item-slot[data-filled='true']"));
 };
@@ -128,6 +135,14 @@ grid.addEventListener("keydown", (event) => {
   event.preventDefault();
   const nextIndex = Math.max(0, Math.min(filledSlots.length - 1, currentIndex + moves[event.key]));
   filledSlots[nextIndex].focus();
+});
+
+window.addEventListener("resize", () => {
+  if (!activeSlot) return;
+
+  selector.style.width = `${activeSlot.offsetWidth}px`;
+  selector.style.height = `${activeSlot.offsetHeight}px`;
+  selector.style.transform = `translate3d(${activeSlot.offsetLeft}px, ${activeSlot.offsetTop}px, 0)`;
 });
 
 renderGrid();
