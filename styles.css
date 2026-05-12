@@ -379,7 +379,6 @@ h1 {
 
 .item-slot[data-filled="true"] {
   background:
-    radial-gradient(circle at 50% 52%, var(--slot-mark) 0 40%, transparent 41%),
     linear-gradient(var(--slot-mark), var(--slot-mark)) top / 100% 4px no-repeat,
     linear-gradient(var(--slot-mark), var(--slot-mark)) bottom / 100% 4px no-repeat,
     linear-gradient(var(--slot-mark), var(--slot-mark)) left top / 4px 36px no-repeat,
@@ -388,6 +387,25 @@ h1 {
     linear-gradient(var(--slot-mark), var(--slot-mark)) right bottom / 4px 36px no-repeat,
     var(--slot-fill);
   cursor: pointer;
+}
+
+.item-slot[data-filled="true"]::before,
+.bottle.filled::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  height: 100%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 52%, var(--slot-mark) 0 40%, transparent 41%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.item-slot > * {
+  position: relative;
+  z-index: 1;
 }
 
 .item-slot[data-filled="true"]:focus-visible {
@@ -560,6 +578,8 @@ h1 {
 }
 
 .bottle {
+  --liquid: #9fd8e8;
+  --liquid-deep: #72b7cf;
   position: relative;
   display: grid;
   place-items: center;
@@ -568,39 +588,54 @@ h1 {
   cursor: default;
 }
 
-.bottle.filled::before {
+.bottle.red {
+  --liquid: #f2646d;
+  --liquid-deep: #de3648;
+}
+
+.bottle.pale {
+  --liquid: #e6f6ff;
+  --liquid-deep: #bdddea;
+}
+
+.bottle.filled span {
+  position: relative;
+  z-index: 2;
+  width: 47px;
+  height: 54px;
+  overflow: hidden;
+  border-radius: 48% 48% 42% 42% / 34% 34% 28% 28%;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.5) 20%, transparent 21% 100%),
+    linear-gradient(180deg, transparent 0 28%, var(--liquid) 29% 100%),
+    rgba(190, 235, 246, 0.85);
+  box-shadow:
+    inset 0 0 0 3px #6bb7cb;
+  transform: translateY(8px);
+}
+
+.bottle.filled span::before {
+  display: none;
+}
+
+.bottle.filled span::after {
+  display: none;
+}
+
+.bottle.filled::after {
   content: "";
   position: absolute;
-  z-index: 0;
-  width: 74%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--slot-mark);
-}
-
-.bottle::after {
-  content: "";
-  position: relative;
-  z-index: 1;
-  width: 48px;
-  height: 54px;
-  clip-path: polygon(39% 0, 64% 0, 64% 18%, 78% 30%, 78% 83%, 62% 100%, 31% 100%, 16% 83%, 16% 30%, 39% 18%);
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  width: 27px;
+  height: 27px;
   background:
-    linear-gradient(#e9a068 0 13%, transparent 14%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.62) 0 15%, transparent 16%),
-    linear-gradient(#eef9ff 0 33%, #9dd0e1 34%);
-  filter: drop-shadow(3px 4px 0 rgba(88, 72, 45, 0.16));
-}
-
-.bottle.red::after {
-  background:
-    linear-gradient(#e9a068 0 13%, transparent 14%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.62) 0 15%, transparent 16%),
-    linear-gradient(#eef9ff 0 35%, #e94950 36%);
-}
-
-.bottle.pale::after {
-  opacity: 0.88;
+    linear-gradient(180deg, #d6ad54 0 18px, #b48639 19px 100%),
+    linear-gradient(90deg, rgba(10, 95, 126, 0.72), rgba(187, 235, 246, 0.78) 29% 71%, rgba(4, 71, 109, 0.72)) center 16px / 30px 14px no-repeat;
+  border-radius: 50% / 16%;
+  clip-path: polygon(14% 0, 86% 0, 86% 54%, 68% 54%, 64% 100%, 36% 100%, 32% 54%, 14% 54%);
+  transform: translate(-50%, -36px);
 }
 
 .bottle.empty::after {

@@ -49,6 +49,21 @@ let activeSlot = null;
 
 selector.className = "slot-selector";
 
+const moveSelectorToSlot = (slot) => {
+  if (!slot) return;
+
+  document.querySelectorAll(".item-slot.is-active").forEach((item) => {
+    item.classList.remove("is-active");
+  });
+
+  slot.classList.add("is-active");
+  activeSlot = slot;
+  selector.style.width = `${slot.offsetWidth}px`;
+  selector.style.height = `${slot.offsetHeight}px`;
+  selector.style.transform = `translate3d(${slot.offsetLeft}px, ${slot.offsetTop}px, 0)`;
+  selector.classList.add("is-visible");
+};
+
 const getTemplateMarkup = (id) => {
   const template = document.querySelector(`#${id}`);
   return template ? template.innerHTML.trim() : "";
@@ -64,18 +79,7 @@ const renderAppIcon = (app, size = "slot") => {
 };
 
 const setActiveApp = (app, slot) => {
-  document.querySelectorAll(".item-slot.is-active").forEach((item) => {
-    item.classList.remove("is-active");
-  });
-
-  if (slot) {
-    slot.classList.add("is-active");
-    activeSlot = slot;
-    selector.style.width = `${slot.offsetWidth}px`;
-    selector.style.height = `${slot.offsetHeight}px`;
-    selector.style.transform = `translate3d(${slot.offsetLeft}px, ${slot.offsetTop}px, 0)`;
-    selector.classList.add("is-visible");
-  }
+  moveSelectorToSlot(slot);
 
   detailIcon.innerHTML = renderAppIcon(app, "detail");
   detailTitle.textContent = app.name;
@@ -97,8 +101,11 @@ const createSlot = (app, index) => {
     slot.addEventListener("mouseenter", () => setActiveApp(app, slot));
     slot.addEventListener("focus", () => setActiveApp(app, slot));
   } else {
-    slot.setAttribute("aria-hidden", "true");
+    slot.tabIndex = 0;
+    slot.setAttribute("aria-label", "Casilla vacia");
     slot.innerHTML = getTemplateMarkup("icon-empty");
+    slot.addEventListener("mouseenter", () => moveSelectorToSlot(slot));
+    slot.addEventListener("focus", () => moveSelectorToSlot(slot));
   }
 
   return slot;
@@ -118,8 +125,8 @@ const renderGrid = () => {
 };
 
 grid.addEventListener("keydown", (event) => {
-  const filledSlots = [...grid.querySelectorAll(".item-slot[data-filled='true']")];
-  const currentIndex = filledSlots.indexOf(document.activeElement);
+  const slots = [...grid.querySelectorAll(".item-slot")];
+  const currentIndex = slots.indexOf(document.activeElement);
 
   if (currentIndex < 0) return;
 
@@ -133,8 +140,8 @@ grid.addEventListener("keydown", (event) => {
   if (!Object.hasOwn(moves, event.key)) return;
 
   event.preventDefault();
-  const nextIndex = Math.max(0, Math.min(filledSlots.length - 1, currentIndex + moves[event.key]));
-  filledSlots[nextIndex].focus();
+  const nextIndex = Math.max(0, Math.min(slots.length - 1, currentIndex + moves[event.key]));
+  slots[nextIndex].focus();
 });
 
 window.addEventListener("resize", () => {
