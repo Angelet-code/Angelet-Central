@@ -378,15 +378,16 @@ h1 {
   padding: 6px;
   border: 3px solid rgba(149, 119, 70, 0.25);
   border-radius: 3px;
-  background:
-    radial-gradient(circle at 50% 52%, rgba(140, 118, 76, 0.18) 0 27%, transparent 28%),
-    rgba(235, 211, 158, 0.55);
+  background: rgba(235, 211, 158, 0.55);
   box-shadow:
     inset 3px 3px rgba(98, 73, 40, 0.09),
     inset -3px -3px rgba(255, 249, 220, 0.34);
 }
 
 .item-slot[data-filled="true"] {
+  background:
+    radial-gradient(circle at 50% 52%, rgba(140, 118, 76, 0.2) 0 35%, transparent 36%),
+    rgba(235, 211, 158, 0.55);
   cursor: pointer;
 }
 
@@ -427,7 +428,6 @@ h1 {
 
 .item-slot svg {
   max-width: 72px;
-  filter: drop-shadow(3px 5px 0 rgba(94, 78, 49, 0.18));
 }
 
 .app-logo {
@@ -439,11 +439,6 @@ h1 {
 .slot-logo {
   width: 72%;
   height: 72%;
-  filter: drop-shadow(3px 5px 0 rgba(94, 78, 49, 0.18));
-}
-
-.detail-logo {
-  filter: drop-shadow(6px 9px 0 rgba(100, 80, 49, 0.14));
 }
 
 .logo-pixelated {
@@ -451,9 +446,7 @@ h1 {
 }
 
 .item-slot.empty svg {
-  width: 62%;
-  opacity: 0.12;
-  fill: #8e7446;
+  display: none;
 }
 
 .item-slot .app-name {
@@ -486,9 +479,7 @@ h1 {
   padding: 0;
   border: 3px solid rgba(149, 119, 70, 0.25);
   border-radius: 3px;
-  background:
-    radial-gradient(circle at 84% 58%, rgba(140, 118, 76, 0.16) 0 38px, transparent 39px),
-    rgba(239, 218, 170, 0.46);
+  background: rgba(239, 218, 170, 0.46);
   box-shadow:
     inset 3px 3px rgba(98, 73, 40, 0.09),
     inset -3px -3px rgba(255, 249, 220, 0.34);
@@ -526,9 +517,7 @@ h1 {
   aspect-ratio: 1;
   border: 3px solid rgba(149, 119, 70, 0.25);
   border-radius: 3px;
-  background:
-    radial-gradient(circle at 50% 52%, rgba(140, 118, 76, 0.18) 0 27%, transparent 28%),
-    rgba(235, 211, 158, 0.55);
+  background: rgba(235, 211, 158, 0.55);
   box-shadow:
     inset 3px 3px rgba(98, 73, 40, 0.09),
     inset -3px -3px rgba(255, 249, 220, 0.34);
@@ -539,20 +528,15 @@ h1 {
   display: grid;
   place-items: center;
   border: 0;
-  border-right: 3px solid rgba(149, 119, 70, 0.16);
-  background: radial-gradient(circle at 50% 52%, rgba(140, 118, 76, 0.13) 0 28%, transparent 29%);
+  background: transparent;
   cursor: default;
 }
 
-.bottle:last-child {
-  border-right: 0;
-}
-
-.bottle::before {
+.bottle.filled::before {
   content: "";
   position: absolute;
-  width: 54%;
-  height: 58%;
+  width: 66%;
+  height: 68%;
   border-radius: 50%;
   background: rgba(137, 113, 73, 0.18);
 }
