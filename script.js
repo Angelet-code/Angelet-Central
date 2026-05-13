@@ -130,11 +130,12 @@ grid.addEventListener("keydown", (event) => {
 
   if (currentIndex < 0) return;
 
+  const columnCount = getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length || 6;
   const moves = {
     ArrowRight: 1,
     ArrowLeft: -1,
-    ArrowDown: 6,
-    ArrowUp: -6
+    ArrowDown: columnCount,
+    ArrowUp: -columnCount
   };
 
   if (!Object.hasOwn(moves, event.key)) return;

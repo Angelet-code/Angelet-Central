@@ -749,27 +749,39 @@ h1 {
   }
 
   .shell {
-    width: min(100%, calc((100vh - 24px) * 16 / 9));
-    aspect-ratio: 16 / 9;
-    min-height: 0;
-    padding: 64px 14px 56px;
+    --slot-size: clamp(72px, 10vw, 84px);
+    width: min(100%, 760px);
+    aspect-ratio: auto;
+    min-height: calc(100svh - 24px);
+    padding: 84px clamp(12px, 3vw, 20px) 72px;
+    border-radius: 22px;
   }
 
   .inventory {
     grid-template-columns: 1fr;
+    width: min(100%, 720px);
     height: auto;
-    gap: 20px;
-    padding: 24px 16px 20px;
+    gap: 18px;
+    padding: 22px clamp(14px, 3vw, 22px) 20px;
+  }
+
+  .inventory-grid-area {
+    height: auto;
+    align-content: start;
+    gap: 16px;
   }
 
   .item-grid {
-    grid-template-columns: repeat(4, minmax(56px, 1fr));
+    grid-template-columns: repeat(4, var(--slot-size));
+    justify-content: center;
     gap: 12px;
   }
 
   .lower-grid {
-    grid-template-columns: repeat(4, minmax(56px, 1fr));
+    grid-template-columns: repeat(4, var(--slot-size));
+    justify-content: center;
     gap: 12px;
+    margin-top: 0;
   }
 
   .bottle-section {
@@ -801,6 +813,11 @@ h1 {
     margin: 12px 0;
   }
 
+  .apps-panel,
+  .wallet {
+    min-height: 64px;
+  }
+
   .footer-hints {
     right: 20px;
     bottom: 16px;
@@ -809,14 +826,27 @@ h1 {
 }
 
 @media (max-width: 560px) {
+  body {
+    padding: 10px;
+  }
+
+  .shell {
+    --slot-size: clamp(62px, 20vw, 74px);
+    width: 100%;
+    min-height: calc(100svh - 20px);
+    padding: 76px 10px 70px;
+    border-radius: 18px;
+    background-position: center top;
+  }
+
   .top-tabs {
-    top: 24px;
+    top: 16px;
     gap: 5px;
   }
 
   .tab {
-    width: 58px;
-    height: 64px;
+    width: 54px;
+    height: 60px;
   }
 
   .tab strong {
@@ -832,36 +862,99 @@ h1 {
     gap: 12px;
   }
 
+  .inventory {
+    gap: 14px;
+    padding: 20px 10px 16px;
+    border-width: 5px;
+  }
+
+  .inventory-grid-area {
+    gap: 12px;
+  }
+
   .item-grid {
-    grid-template-columns: repeat(3, minmax(58px, 1fr));
+    grid-template-columns: repeat(3, var(--slot-size));
+    gap: 10px;
   }
 
   .lower-grid {
-    grid-template-columns: repeat(4, minmax(44px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .bottle-section {
+    grid-column: 1 / -1;
+    height: var(--slot-size);
   }
 
   .bottle-row {
     grid-template-columns: repeat(4, minmax(44px, 1fr));
-    gap: 8px;
+    gap: 0;
+  }
+
+  .bottle.filled span {
+    width: clamp(38px, 12vw, 47px);
+    height: clamp(44px, 14vw, 54px);
   }
 
   .detail-plate {
-    grid-template-columns: 78px 1fr;
-    padding: 18px;
+    grid-template-columns: minmax(58px, 72px) minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 14px;
   }
 
   .detail-icon {
-    width: 78px;
+    width: min(72px, 100%);
+  }
+
+  .detail-plate h2 {
+    font-size: clamp(17px, 5vw, 22px);
+  }
+
+  .detail-plate p {
+    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 1.36;
+  }
+
+  .apps-panel {
+    min-height: 58px;
+    padding: 20px 14px 8px;
   }
 
   .wallet {
     height: auto;
+    min-height: 72px;
+    padding: 28px 14px 10px;
     justify-content: center;
+    gap: 12px;
+  }
+
+  .wallet strong {
+    font-size: clamp(30px, 11vw, 40px);
+  }
+
+  .rupee-stack {
+    width: 38px;
+    height: 48px;
+  }
+
+  .rupee-stack i {
+    width: 21px;
+    height: 36px;
   }
 
   .footer-hints {
-    left: 20px;
+    left: 50%;
     right: auto;
+    width: max-content;
+    transform: translateX(-50%);
     gap: 14px;
+    font-size: 15px;
+  }
+
+  .footer-hints b {
+    width: 24px;
+    height: 24px;
   }
 }
