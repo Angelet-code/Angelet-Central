@@ -27,6 +27,7 @@
 
 body {
   min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
   display: grid;
   place-items: center;
@@ -45,147 +46,18 @@ a {
 
 .shell {
   position: relative;
-  width: min(1180px, 100%);
-  min-height: min(760px, calc(100vh - 40px));
+  width: min(1500px, calc(100vw - 40px), calc((100vh - 40px) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  min-height: 0;
   padding: clamp(108px, 10vw, 120px) clamp(22px, 4vw, 56px) 46px;
   overflow: hidden;
   border-radius: 28px;
-  background: rgba(17, 14, 12, 0.94);
+  background:
+    linear-gradient(rgba(6, 10, 9, 0.18), rgba(6, 10, 9, 0.5)),
+    url("assets/backgrounds/wind-waker-bg-clean.png") center / cover no-repeat;
   box-shadow:
     0 28px 70px rgba(0, 0, 0, 0.45),
     inset 0 0 0 2px rgba(245, 238, 202, 0.08);
-}
-
-.shell::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.82);
-  pointer-events: none;
-}
-
-.dungeon-bg {
-  position: absolute;
-  inset: 58px 0 0;
-  opacity: 0.46;
-  filter: blur(1px);
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.52), transparent 14%, transparent 86%, rgba(0, 0, 0, 0.52)),
-    repeating-linear-gradient(0deg, rgba(90, 72, 52, 0.62) 0 3px, transparent 3px 47px),
-    repeating-linear-gradient(90deg, rgba(58, 42, 32, 0.8) 0 4px, transparent 4px 82px),
-    linear-gradient(#6b5038, #32251d);
-}
-
-.dungeon-bg::before,
-.dungeon-bg::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 96px;
-  height: 85%;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.48), transparent 30%, rgba(255, 220, 150, 0.05) 52%, rgba(0, 0, 0, 0.5)),
-    repeating-linear-gradient(0deg, #281d18 0 11px, #5e4734 11px 15px, #34241c 15px 39px);
-}
-
-.dungeon-bg::before {
-  left: 22px;
-}
-
-.dungeon-bg::after {
-  right: 22px;
-}
-
-.hud-strip {
-  position: absolute;
-  top: 0;
-  left: 24px;
-  right: 24px;
-  height: 74px;
-  display: grid;
-  grid-template-columns: 90px 120px 1fr auto;
-  align-items: center;
-  gap: 18px;
-  padding: 0 18px;
-  color: #f3e9c3;
-  background: rgba(19, 14, 11, 0.42);
-  border-bottom: 4px solid rgba(10, 7, 6, 0.44);
-}
-
-.hud-meter {
-  height: 56px;
-  width: 34px;
-  border: 4px solid #0b0b0a;
-  background: #0c5923;
-  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.1);
-}
-
-.hud-meter span {
-  display: block;
-  height: 12px;
-  margin: 3px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.hud-item-preview {
-  width: 74px;
-  height: 48px;
-  border: 4px solid #16100e;
-  background:
-    linear-gradient(135deg, transparent 44%, #8c4a29 45% 54%, transparent 55%),
-    linear-gradient(45deg, transparent 35%, #e4c965 36% 42%, transparent 43%),
-    #d2bc75;
-}
-
-.hud-rupee {
-  width: 26px;
-  height: 42px;
-  clip-path: polygon(50% 0, 88% 22%, 88% 76%, 50% 100%, 12% 76%, 12% 22%);
-  background: linear-gradient(90deg, #1d8e5a 0 24%, #48d99d 25% 68%, #18815e 69%);
-}
-
-.hud-life {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 28px;
-  font-weight: 800;
-  color: #eadcba;
-  text-shadow: 3px 3px #090807;
-}
-
-.hud-life i {
-  width: 20px;
-  height: 18px;
-  position: relative;
-  transform: rotate(-45deg);
-  background: #12100f;
-  box-shadow: inset 0 0 0 2px #050505;
-}
-
-.hud-life i::before,
-.hud-life i::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 18px;
-  border-radius: 50%;
-  background: inherit;
-}
-
-.hud-life i::before {
-  top: -9px;
-  left: 0;
-}
-
-.hud-life i::after {
-  top: 0;
-  left: 9px;
-}
-
-.hud-life i:nth-of-type(-n + 3) {
-  background: #b53038;
 }
 
 .top-tabs {
@@ -308,9 +180,10 @@ a {
   display: grid;
   grid-template-columns: minmax(540px, 1fr) minmax(260px, 310px);
   gap: clamp(24px, 4vw, 44px);
-  width: 100%;
+  width: min(100%, 1068px);
   height: auto;
   min-height: 0;
+  margin: 0 auto;
   padding: clamp(24px, 3vw, 32px);
   border: 7px solid var(--teal);
   border-radius: var(--panel-radius);
@@ -876,21 +749,10 @@ h1 {
   }
 
   .shell {
-    min-height: auto;
+    width: min(100%, calc((100vh - 24px) * 16 / 9));
+    aspect-ratio: 16 / 9;
+    min-height: 0;
     padding: 64px 14px 56px;
-    border-radius: 18px;
-  }
-
-  .hud-strip {
-    grid-template-columns: 42px 58px 1fr;
-    height: 58px;
-    gap: 10px;
-    left: 10px;
-    right: 10px;
-  }
-
-  .hud-life {
-    display: none;
   }
 
   .inventory {
