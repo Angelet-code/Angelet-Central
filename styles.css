@@ -725,7 +725,7 @@ h1 {
 }
 
 .task-selector {
-  z-index: 4;
+  z-index: 2;
 }
 
 .task-done {

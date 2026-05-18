@@ -40,7 +40,7 @@ const apps = [
 
 const sections = [
   { id: "apps", label: "Apps" },
-  { id: "notes", label: "Notas" }
+  { id: "notes", label: "Tareas" }
 ];
 
 const totalSlots = 18;
@@ -242,11 +242,18 @@ const completeTask = (row) => {
   input.focus();
 };
 
-const moveToNextTaskInput = (row) => {
-  const currentIndex = taskRows.indexOf(row);
-  const nextRow = taskRows[currentIndex + 1] || taskRows[0];
+const focusTaskInput = (row) => {
+  const input = getTaskInput(row);
 
-  getTaskInput(nextRow).focus();
+  input.focus();
+  input.setSelectionRange(input.value.length, input.value.length);
+};
+
+const moveToTaskInput = (row, offset) => {
+  const currentIndex = taskRows.indexOf(row);
+  const nextIndex = (currentIndex + offset + taskRows.length) % taskRows.length;
+
+  focusTaskInput(taskRows[nextIndex]);
 };
 
 const getTemplateMarkup = (id) => {
@@ -414,10 +421,10 @@ taskRows.forEach((row) => {
   row.addEventListener("focusin", () => moveTaskSelectorToRow(row));
   input.addEventListener("input", saveNotesState);
   input.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter") return;
+    if (event.key !== "Enter" && event.key !== "Tab") return;
 
     event.preventDefault();
-    moveToNextTaskInput(row);
+    moveToTaskInput(row, event.shiftKey ? -1 : 1);
   });
 
   checkbox.addEventListener("change", () => completeTask(row));
