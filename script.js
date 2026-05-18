@@ -38,16 +38,49 @@ const apps = [
   }
 ];
 
+const sections = [
+  { id: "apps", label: "Apps" },
+  { id: "notes", label: "Notas" }
+];
+
 const totalSlots = 18;
+const shell = document.querySelector(".shell");
+const sectionTabs = document.querySelector("#section-tabs");
+const pageTitle = document.querySelector("#page-title");
+const tabButtons = [...document.querySelectorAll("[data-tab-id]")];
+const tabPanels = [...document.querySelectorAll("[data-tab-panel]")];
+const tabShiftButtons = [...document.querySelectorAll("[data-tab-shift]")];
 const grid = document.querySelector("#app-grid");
 const appCount = document.querySelector("#app-count");
 const detailIcon = document.querySelector("#detail-icon");
 const detailTitle = document.querySelector("#detail-title");
 const detailDescription = document.querySelector("#detail-description");
+const taskList = document.querySelector(".task-list");
+const taskRows = [...document.querySelectorAll("[data-task-row]")];
+const completedTasks = document.querySelector("#completed-tasks");
 const selector = document.createElement("div");
+const taskSelector = document.createElement("div");
+const notesStorageKey = "angelet-central-notes";
+let activeSectionIndex = sections.findIndex((section) => section.id === "apps");
 let activeSlot = null;
+let activeTaskRow = null;
+let swipeStart = null;
+let completedTaskItems = [];
 
 selector.className = "slot-selector";
+taskSelector.className = "slot-selector task-selector";
+
+const getWrappedSectionIndex = (index) => (index + sections.length) % sections.length;
+
+const getActiveSection = () => sections[activeSectionIndex];
+
+const positionSelector = () => {
+  if (!activeSlot) return;
+
+  selector.style.width = `${activeSlot.offsetWidth}px`;
+  selector.style.height = `${activeSlot.offsetHeight}px`;
+  selector.style.transform = `translate3d(${activeSlot.offsetLeft}px, ${activeSlot.offsetTop}px, 0)`;
+};
 
 const moveSelectorToSlot = (slot) => {
   if (!slot) return;
@@ -58,10 +91,162 @@ const moveSelectorToSlot = (slot) => {
 
   slot.classList.add("is-active");
   activeSlot = slot;
-  selector.style.width = `${slot.offsetWidth}px`;
-  selector.style.height = `${slot.offsetHeight}px`;
-  selector.style.transform = `translate3d(${slot.offsetLeft}px, ${slot.offsetTop}px, 0)`;
+  positionSelector();
   selector.classList.add("is-visible");
+};
+
+const refreshActiveSelector = () => {
+  if (!activeSlot) return;
+
+  positionSelector();
+  selector.classList.add("is-visible");
+};
+
+const positionTaskSelector = () => {
+  if (!activeTaskRow) return;
+
+  taskSelector.style.width = `${activeTaskRow.offsetWidth}px`;
+  taskSelector.style.height = `${activeTaskRow.offsetHeight}px`;
+  taskSelector.style.transform = `translate3d(${activeTaskRow.offsetLeft}px, ${activeTaskRow.offsetTop}px, 0)`;
+};
+
+const moveTaskSelectorToRow = (row) => {
+  if (!row) return;
+
+  activeTaskRow = row;
+  positionTaskSelector();
+  taskSelector.classList.add("is-visible");
+};
+
+const refreshTaskSelector = () => {
+  if (!activeTaskRow) return;
+
+  positionTaskSelector();
+  taskSelector.classList.add("is-visible");
+};
+
+const setActiveSection = (sectionTarget) => {
+  const nextIndex =
+    typeof sectionTarget === "number"
+      ? getWrappedSectionIndex(sectionTarget)
+      : sections.findIndex((section) => section.id === sectionTarget);
+
+  if (nextIndex < 0) return;
+
+  activeSectionIndex = nextIndex;
+  const activeSection = getActiveSection();
+
+  shell.dataset.activeTab = activeSection.id;
+  pageTitle.textContent = activeSection.label;
+
+  tabButtons.forEach((button) => {
+    const isActive = button.dataset.tabId === activeSection.id;
+
+    button.classList.toggle("active", isActive);
+    button.classList.toggle("ghost", !isActive);
+
+    if (isActive) {
+      button.setAttribute("aria-current", "page");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
+
+  tabPanels.forEach((panel) => {
+    const isActive = panel.dataset.tabPanel === activeSection.id;
+
+    panel.hidden = !isActive;
+    panel.classList.toggle("is-active", isActive);
+  });
+
+  if (activeSection.id === "apps") {
+    taskSelector.classList.remove("is-visible");
+    requestAnimationFrame(refreshActiveSelector);
+  } else {
+    selector.classList.remove("is-visible");
+    requestAnimationFrame(refreshTaskSelector);
+  }
+};
+
+const moveSection = (offset) => {
+  setActiveSection(activeSectionIndex + offset);
+};
+
+const getTaskInput = (row) => row.querySelector(".task-input");
+
+const getTaskCheckbox = (row) => row.querySelector(".task-done");
+
+const getPendingTasks = () => taskRows.map((row) => getTaskInput(row).value);
+
+const renderCompletedTasks = () => {
+  const fragment = document.createDocumentFragment();
+
+  completedTaskItems.forEach((task) => {
+    const item = document.createElement("li");
+    item.textContent = task;
+    fragment.appendChild(item);
+  });
+
+  completedTasks.replaceChildren(fragment);
+};
+
+const saveNotesState = () => {
+  try {
+    localStorage.setItem(
+      notesStorageKey,
+      JSON.stringify({
+        pending: getPendingTasks(),
+        completed: completedTaskItems
+      })
+    );
+  } catch {
+    // The checklist still works if browser storage is unavailable.
+  }
+};
+
+const loadNotesState = () => {
+  let savedState = null;
+
+  try {
+    savedState = JSON.parse(localStorage.getItem(notesStorageKey));
+  } catch {
+    savedState = null;
+  }
+
+  if (Array.isArray(savedState?.pending)) {
+    taskRows.forEach((row, index) => {
+      getTaskInput(row).value = savedState.pending[index] || "";
+    });
+  }
+
+  completedTaskItems = Array.isArray(savedState?.completed) ? savedState.completed : [];
+  renderCompletedTasks();
+};
+
+const completeTask = (row) => {
+  const input = getTaskInput(row);
+  const checkbox = getTaskCheckbox(row);
+  const task = input.value.trim();
+
+  checkbox.checked = false;
+
+  if (!task) {
+    input.focus();
+    return;
+  }
+
+  completedTaskItems.unshift(task);
+  input.value = "";
+  renderCompletedTasks();
+  saveNotesState();
+  input.focus();
+};
+
+const moveToNextTaskInput = (row) => {
+  const currentIndex = taskRows.indexOf(row);
+  const nextRow = taskRows[currentIndex + 1] || taskRows[0];
+
+  getTaskInput(nextRow).focus();
 };
 
 const getTemplateMarkup = (id) => {
@@ -125,6 +310,8 @@ const renderGrid = () => {
 };
 
 grid.addEventListener("keydown", (event) => {
+  if (getActiveSection().id !== "apps") return;
+
   const slots = [...grid.querySelectorAll(".item-slot")];
   const currentIndex = slots.indexOf(document.activeElement);
 
@@ -146,11 +333,89 @@ grid.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("resize", () => {
-  if (!activeSlot) return;
+  if (getActiveSection().id === "apps") {
+    positionSelector();
+    return;
+  }
 
-  selector.style.width = `${activeSlot.offsetWidth}px`;
-  selector.style.height = `${activeSlot.offsetHeight}px`;
-  selector.style.transform = `translate3d(${activeSlot.offsetLeft}px, ${activeSlot.offsetTop}px, 0)`;
+  positionTaskSelector();
 });
 
+tabButtons.forEach((button) => {
+  button.addEventListener("click", () => setActiveSection(button.dataset.tabId));
+});
+
+tabShiftButtons.forEach((button) => {
+  button.addEventListener("click", () => moveSection(Number(button.dataset.tabShift)));
+});
+
+sectionTabs.addEventListener("keydown", (event) => {
+  const moves = {
+    ArrowLeft: -1,
+    ArrowRight: 1
+  };
+
+  if (!Object.hasOwn(moves, event.key)) return;
+
+  event.preventDefault();
+  moveSection(moves[event.key]);
+  tabButtons[activeSectionIndex].focus();
+});
+
+shell.addEventListener(
+  "pointerdown",
+  (event) => {
+    if (event.pointerType === "mouse" || event.target.closest("input, textarea, select, [contenteditable='true']")) return;
+
+    swipeStart = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY
+    };
+  },
+  { passive: true }
+);
+
+shell.addEventListener(
+  "pointerup",
+  (event) => {
+    if (!swipeStart || event.pointerId !== swipeStart.id) return;
+
+    const deltaX = event.clientX - swipeStart.x;
+    const deltaY = event.clientY - swipeStart.y;
+    const isHorizontalSwipe = Math.abs(deltaX) > 56 && Math.abs(deltaX) > Math.abs(deltaY) * 1.35;
+
+    if (isHorizontalSwipe) {
+      moveSection(deltaX < 0 ? 1 : -1);
+    }
+
+    swipeStart = null;
+  },
+  { passive: true }
+);
+
+shell.addEventListener("pointercancel", () => {
+  swipeStart = null;
+});
+
+taskRows.forEach((row) => {
+  const input = getTaskInput(row);
+  const checkbox = getTaskCheckbox(row);
+
+  row.addEventListener("mouseenter", () => moveTaskSelectorToRow(row));
+  row.addEventListener("focusin", () => moveTaskSelectorToRow(row));
+  input.addEventListener("input", saveNotesState);
+  input.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter") return;
+
+    event.preventDefault();
+    moveToNextTaskInput(row);
+  });
+
+  checkbox.addEventListener("change", () => completeTask(row));
+});
+
+taskList.appendChild(taskSelector);
+loadNotesState();
+setActiveSection("apps");
 renderGrid();

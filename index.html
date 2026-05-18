@@ -13,22 +13,20 @@
   </head>
   <body>
     <main class="shell" aria-labelledby="page-title">
-      <nav class="top-tabs" aria-label="Secciones">
-        <span class="shoulder">L</span>
-        <button class="tab ghost" type="button" aria-label="Cristales">
-          <span class="tab-gem"></span>
-        </button>
-        <button class="tab active" type="button" aria-current="page">
-          <span class="tab-bow"></span>
+      <nav id="section-tabs" class="top-tabs" aria-label="Secciones">
+        <button class="shoulder tab-shift" type="button" data-tab-shift="-1" aria-label="Pestaña anterior">L</button>
+        <button class="tab active" type="button" data-tab-id="apps" aria-current="page">
+          <span class="tab-flask"></span>
           <strong>Apps</strong>
         </button>
-        <button class="tab ghost" type="button" aria-label="Botellas">
-          <span class="tab-bottle"></span>
+        <button class="tab ghost" type="button" data-tab-id="notes">
+          <span class="tab-scroll"></span>
+          <strong>Notas</strong>
         </button>
-        <span class="shoulder">R</span>
+        <button class="shoulder tab-shift" type="button" data-tab-shift="1" aria-label="Pestaña siguiente">R</button>
       </nav>
 
-      <section class="inventory" aria-label="Inventario de aplicaciones">
+      <section class="inventory tab-panel is-active" data-tab-panel="apps" aria-label="Inventario de aplicaciones">
         <div class="inventory-grid-area">
           <header class="brand-row">
             <div>
@@ -82,6 +80,44 @@
               <i></i>
             </div>
           </div>
+        </aside>
+      </section>
+
+      <section class="inventory tab-panel notes-inventory" data-tab-panel="notes" aria-label="Notas" hidden>
+        <div class="notes-grid-area">
+          <span class="section-label">Notas</span>
+          <div class="task-list" aria-label="Tareas pendientes">
+            <div class="task-item" data-task-row>
+              <input class="task-done" type="checkbox" aria-label="Completar tarea 1" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Tarea 1" autocomplete="off" placeholder="" />
+            </div>
+            <div class="task-item" data-task-row>
+              <input class="task-done" type="checkbox" aria-label="Completar tarea 2" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Tarea 2" autocomplete="off" placeholder="" />
+            </div>
+            <div class="task-item" data-task-row>
+              <input class="task-done" type="checkbox" aria-label="Completar tarea 3" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Tarea 3" autocomplete="off" placeholder="" />
+            </div>
+            <div class="task-item" data-task-row>
+              <input class="task-done" type="checkbox" aria-label="Completar tarea 4" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Tarea 4" autocomplete="off" placeholder="" />
+            </div>
+            <div class="task-item" data-task-row>
+              <input class="task-done" type="checkbox" aria-label="Completar tarea 5" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Tarea 5" autocomplete="off" placeholder="" />
+            </div>
+          </div>
+        </div>
+
+        <aside class="completed-panel" aria-label="Tareas completadas">
+          <span class="section-label">Completadas</span>
+          <ul id="completed-tasks" class="completed-list"></ul>
         </aside>
       </section>
 
