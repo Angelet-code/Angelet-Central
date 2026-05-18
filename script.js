@@ -345,6 +345,14 @@ tabButtons.forEach((button) => {
   button.addEventListener("click", () => setActiveSection(button.dataset.tabId));
 });
 
+sectionTabs.addEventListener("click", (event) => {
+  const tabButton = event.target.closest("[data-tab-id]");
+
+  if (!tabButton) return;
+
+  setActiveSection(tabButton.dataset.tabId);
+});
+
 tabShiftButtons.forEach((button) => {
   button.addEventListener("click", () => moveSection(Number(button.dataset.tabShift)));
 });
