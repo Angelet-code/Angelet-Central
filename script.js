@@ -35,6 +35,14 @@ const apps = [
     short: "$",
     description:
       "App para dividir la cuenta pagando cada uno lo suyo, marcando productos y calculando el total por persona."
+  },
+  {
+    name: "Left2Eat",
+    url: "https://angelet-code.github.io/left2eat/",
+    icon: "icon-left2eat",
+    short: "L2E",
+    description:
+      "Diario nutricional personal para registrar comidas, calcular macros en tiempo real y consultar el historico."
   }
 ];
 

@@ -1008,6 +1008,20 @@ h1 {
 }
 .tiny-rupee { fill: #46bc84; }
 
+.l2e-shadow { fill: rgba(79, 60, 35, 0.22); }
+.l2e-plate { fill: #f4e5bc; }
+.l2e-plate-inner { fill: #d1b66d; }
+.l2e-fork {
+  fill: none;
+  stroke: #6d5123;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.l2e-bar.protein { fill: #d64d45; }
+.l2e-bar.carbs { fill: #467fd5; }
+.l2e-bar.fat { fill: #46bc84; }
+
 @media (max-width: 920px) {
   body {
     align-items: start;
