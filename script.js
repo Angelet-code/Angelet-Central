@@ -98,6 +98,11 @@ const getWrappedSectionIndex = (index) => (index + sections.length) % sections.l
 
 const getActiveSection = () => sections[activeSectionIndex];
 
+const isTextEntryTarget = (target) =>
+  target instanceof Element && target.closest("input, textarea, select, [contenteditable='true']");
+
+const isPlainShortcut = (event) => !event.altKey && !event.ctrlKey && !event.metaKey;
+
 const getSectionFromHash = () => {
   const hashId = window.location.hash.replace("#", "");
   return sections.some((section) => section.id === hashId) ? hashId : "apps";
@@ -465,15 +470,27 @@ const renderGrid = () => {
   setActiveApp(apps[0], grid.querySelector(".item-slot[data-filled='true']"));
 };
 
+const getGridColumnCount = () => getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length || 6;
+
+const moveAppFocus = (offset) => {
+  if (getActiveSection().id !== "apps") return false;
+
+  const slots = [...grid.querySelectorAll(".item-slot")];
+  if (!slots.length) return false;
+
+  const focusedIndex = slots.indexOf(document.activeElement);
+  const activeIndex = slots.indexOf(activeSlot);
+  const currentIndex = focusedIndex >= 0 ? focusedIndex : Math.max(0, activeIndex);
+  const nextIndex = Math.max(0, Math.min(slots.length - 1, currentIndex + offset));
+
+  slots[nextIndex].focus();
+  return true;
+};
+
 grid.addEventListener("keydown", (event) => {
   if (getActiveSection().id !== "apps") return;
 
-  const slots = [...grid.querySelectorAll(".item-slot")];
-  const currentIndex = slots.indexOf(document.activeElement);
-
-  if (currentIndex < 0) return;
-
-  const columnCount = getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length || 6;
+  const columnCount = getGridColumnCount();
   const moves = {
     ArrowRight: 1,
     ArrowLeft: -1,
@@ -484,8 +501,7 @@ grid.addEventListener("keydown", (event) => {
   if (!Object.hasOwn(moves, event.key)) return;
 
   event.preventDefault();
-  const nextIndex = Math.max(0, Math.min(slots.length - 1, currentIndex + moves[event.key]));
-  slots[nextIndex].focus();
+  moveAppFocus(moves[event.key]);
 });
 
 window.addEventListener("resize", () => {
@@ -524,6 +540,38 @@ sectionTabs.addEventListener("keydown", (event) => {
   event.preventDefault();
   moveSection(moves[event.key]);
   tabButtons[activeSectionIndex].focus();
+});
+
+window.addEventListener("keydown", (event) => {
+  if (!isPlainShortcut(event) || isTextEntryTarget(event.target)) return;
+
+  const key = event.key.toLowerCase();
+
+  if (key === "q" || key === "e") {
+    event.preventDefault();
+    moveSection(key === "q" ? -1 : 1);
+    return;
+  }
+
+  if (key === "r") {
+    event.preventDefault();
+    loadMarketData({ force: true });
+    return;
+  }
+
+  const columnCount = getGridColumnCount();
+  const appMoves = {
+    d: 1,
+    a: -1,
+    s: columnCount,
+    w: -columnCount
+  };
+
+  if (!Object.hasOwn(appMoves, key)) return;
+
+  if (moveAppFocus(appMoves[key])) {
+    event.preventDefault();
+  }
 });
 
 window.addEventListener("hashchange", () => setActiveSection(getSectionFromHash()));
