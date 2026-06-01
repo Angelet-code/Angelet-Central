@@ -47,8 +47,8 @@ const apps = [
 ];
 
 const sections = [
-  { id: "apps", label: "Apps" },
   { id: "markets", label: "Mercados" },
+  { id: "apps", label: "Apps" },
   { id: "notes", label: "Tareas" }
 ];
 

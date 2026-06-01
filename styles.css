@@ -68,7 +68,7 @@ a {
   left: 50%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 20px;
   transform: translateX(-50%);
 }
 
@@ -854,15 +854,19 @@ h1 {
   padding: 34px 18px 16px;
   border-radius: 8px;
   background: var(--slot-fill);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .market-status-card .section-label,
 .market-note .section-label {
   position: absolute;
   left: 0;
-  top: 0;
-  transform: translateY(-8px);
+  top: -8px;
+  width: max-content;
+  max-width: calc(100% - 12px);
+  min-width: 96px;
+  border-radius: 4px;
+  transform: none;
 }
 
 .market-status-card {
@@ -1386,7 +1390,7 @@ h1 {
 
   .top-tabs {
     top: 16px;
-    gap: 5px;
+    gap: 24px;
   }
 
   .tab {
@@ -1395,7 +1399,7 @@ h1 {
   }
 
   .tab strong {
-    padding-inline: 15px;
+    padding-inline: 12px;
   }
 
   .shoulder {
