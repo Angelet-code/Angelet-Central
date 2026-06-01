@@ -157,10 +157,12 @@ const refreshTaskSelector = () => {
 const formatMarketPrice = (value, decimals) => {
   if (!Number.isFinite(value)) return "Sin dato";
 
-  return new Intl.NumberFormat("es-ES", {
-    maximumFractionDigits: decimals,
-    minimumFractionDigits: decimals
-  }).format(value);
+  const [integerPart, decimalPart] = value.toFixed(decimals).split(".");
+  const groupedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  if (!decimalPart) return groupedInteger;
+
+  return `${groupedInteger},${decimalPart}`;
 };
 
 const formatMarketChange = (value, percent, decimals = 2) => {
