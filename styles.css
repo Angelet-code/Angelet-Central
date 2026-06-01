@@ -280,6 +280,7 @@ a {
 }
 
 .inventory-grid-area {
+  position: relative;
   display: grid;
   height: var(--inventory-content-height);
   align-content: space-between;
@@ -358,7 +359,9 @@ h1 {
 }
 
 .item-slot:focus,
-.item-slot:focus-visible {
+.item-slot:focus-visible,
+.bottle:focus,
+.bottle:focus-visible {
   outline: 0;
 }
 
@@ -421,6 +424,19 @@ h1 {
 
 .item-slot svg {
   max-width: 72px;
+}
+
+.item-slot[data-filled="true"] .app-logo,
+.item-slot[data-filled="true"] svg {
+  transform-origin: center;
+  transition: transform 0.12s ease;
+}
+
+.item-slot[data-filled="true"]:hover .app-logo,
+.item-slot[data-filled="true"]:focus-visible .app-logo,
+.item-slot[data-filled="true"]:hover svg,
+.item-slot[data-filled="true"]:focus-visible svg {
+  transform: translateY(-2px);
 }
 
 .app-logo {
@@ -501,7 +517,7 @@ h1 {
   position: absolute;
   left: -8px;
   top: -16px;
-  z-index: 3;
+  z-index: 5;
 }
 
 .bottle-row {
@@ -633,8 +649,7 @@ h1 {
 }
 
 .bottle-app:focus-visible {
-  outline: 3px solid rgba(32, 125, 114, 0.75);
-  outline-offset: -3px;
+  outline: 0;
 }
 
 .detail-panel {

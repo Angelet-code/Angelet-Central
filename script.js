@@ -67,6 +67,8 @@ const pageTitle = document.querySelector("#page-title");
 const tabButtons = [...document.querySelectorAll("[data-tab-id]")];
 const tabPanels = [...document.querySelectorAll("[data-tab-panel]")];
 const tabShiftButtons = [...document.querySelectorAll("[data-tab-shift]")];
+const appsInventory = document.querySelector("[data-tab-panel='apps']");
+const appsInventoryGridArea = document.querySelector(".inventory-grid-area");
 const grid = document.querySelector("#app-grid");
 const appCount = document.querySelector("#app-count");
 const detailIcon = document.querySelector("#detail-icon");
@@ -77,6 +79,7 @@ const marketRefresh = document.querySelector("#market-refresh");
 const marketStatus = document.querySelector("#market-status");
 const marketUpdated = document.querySelector("#market-updated");
 const bottleAppLinks = [...document.querySelectorAll(".bottle-app")];
+const bottleSlots = [...document.querySelectorAll(".bottle-row .bottle")];
 const taskList = document.querySelector(".notes-inventory .task-list");
 const taskRows = [...document.querySelectorAll("[data-task-row]")];
 const completedTasks = document.querySelector("#completed-tasks");
@@ -119,15 +122,19 @@ const getSectionFromHash = () => {
 const positionSelector = () => {
   if (!activeSlot) return;
 
-  selector.style.width = `${activeSlot.offsetWidth}px`;
-  selector.style.height = `${activeSlot.offsetHeight}px`;
-  selector.style.transform = `translate3d(${activeSlot.offsetLeft}px, ${activeSlot.offsetTop}px, 0)`;
+  const selectorArea = selector.parentElement;
+  const slotRect = activeSlot.getBoundingClientRect();
+  const areaRect = selectorArea.getBoundingClientRect();
+
+  selector.style.width = `${slotRect.width}px`;
+  selector.style.height = `${slotRect.height}px`;
+  selector.style.transform = `translate3d(${slotRect.left - areaRect.left}px, ${slotRect.top - areaRect.top}px, 0)`;
 };
 
 const moveSelectorToSlot = (slot) => {
   if (!slot) return;
 
-  document.querySelectorAll(".item-slot.is-active").forEach((item) => {
+  document.querySelectorAll(".item-slot.is-active, .bottle.is-active").forEach((item) => {
     item.classList.remove("is-active");
   });
 
@@ -558,43 +565,82 @@ const renderGrid = () => {
   }
 
   grid.appendChild(fragment);
-  grid.appendChild(selector);
+  appsInventoryGridArea.appendChild(selector);
   appCount.textContent = String(apps.length + bottleAppLinks.length).padStart(2, "0");
   setActiveApp(apps[0], grid.querySelector(".item-slot[data-filled='true']"));
 };
 
-const getGridColumnCount = () => getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length || 6;
+const getSelectableAppSlots = () => [...grid.querySelectorAll(".item-slot"), ...bottleSlots];
 
-const moveAppFocus = (offset) => {
+const getSlotDirectionScore = (fromSlot, toSlot, direction) => {
+  const fromRect = fromSlot.getBoundingClientRect();
+  const toRect = toSlot.getBoundingClientRect();
+  const fromCenter = {
+    x: fromRect.left + fromRect.width / 2,
+    y: fromRect.top + fromRect.height / 2
+  };
+  const toCenter = {
+    x: toRect.left + toRect.width / 2,
+    y: toRect.top + toRect.height / 2
+  };
+  const deltaX = toCenter.x - fromCenter.x;
+  const deltaY = toCenter.y - fromCenter.y;
+
+  if (direction === "right" && deltaX <= 1) return Number.POSITIVE_INFINITY;
+  if (direction === "left" && deltaX >= -1) return Number.POSITIVE_INFINITY;
+  if (direction === "down" && deltaY <= 1) return Number.POSITIVE_INFINITY;
+  if (direction === "up" && deltaY >= -1) return Number.POSITIVE_INFINITY;
+
+  const primaryDistance = direction === "left" || direction === "right" ? Math.abs(deltaX) : Math.abs(deltaY);
+  const crossAxisDistance = direction === "left" || direction === "right" ? Math.abs(deltaY) : Math.abs(deltaX);
+
+  return primaryDistance + crossAxisDistance * 2;
+};
+
+const moveAppFocus = (direction) => {
   if (getActiveSection().id !== "apps") return false;
 
-  const slots = [...grid.querySelectorAll(".item-slot")];
+  const slots = getSelectableAppSlots();
   if (!slots.length) return false;
 
   const focusedIndex = slots.indexOf(document.activeElement);
   const activeIndex = slots.indexOf(activeSlot);
   const currentIndex = focusedIndex >= 0 ? focusedIndex : Math.max(0, activeIndex);
-  const nextIndex = Math.max(0, Math.min(slots.length - 1, currentIndex + offset));
+  const currentSlot = slots[currentIndex];
+  const nextSlot = slots
+    .filter((slot) => slot !== currentSlot)
+    .map((slot) => ({
+      slot,
+      score: getSlotDirectionScore(currentSlot, slot, direction)
+    }))
+    .filter((candidate) => Number.isFinite(candidate.score))
+    .sort((first, second) => first.score - second.score)[0]?.slot;
 
-  slots[nextIndex].focus();
+  if (!nextSlot) return false;
+
+  nextSlot.focus();
   return true;
 };
 
-grid.addEventListener("keydown", (event) => {
+appsInventory.addEventListener("keydown", (event) => {
   if (getActiveSection().id !== "apps") return;
 
-  const columnCount = getGridColumnCount();
   const moves = {
-    ArrowRight: 1,
-    ArrowLeft: -1,
-    ArrowDown: columnCount,
-    ArrowUp: -columnCount
+    ArrowRight: "right",
+    ArrowLeft: "left",
+    ArrowDown: "down",
+    ArrowUp: "up"
   };
 
   if (!Object.hasOwn(moves, event.key)) return;
 
   event.preventDefault();
   moveAppFocus(moves[event.key]);
+});
+
+bottleSlots.forEach((slot) => {
+  slot.addEventListener("mouseenter", () => moveSelectorToSlot(slot));
+  slot.addEventListener("focus", () => moveSelectorToSlot(slot));
 });
 
 window.addEventListener("resize", () => {
@@ -659,12 +705,11 @@ window.addEventListener("keydown", (event) => {
     return;
   }
 
-  const columnCount = getGridColumnCount();
   const appMoves = {
-    d: 1,
-    a: -1,
-    s: columnCount,
-    w: -columnCount
+    d: "right",
+    a: "left",
+    s: "down",
+    w: "up"
   };
 
   if (!Object.hasOwn(appMoves, key)) return;
