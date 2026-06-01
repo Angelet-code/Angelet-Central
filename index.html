@@ -9,7 +9,7 @@
       content="Central de aplicaciones de Angelet con estetica de inventario clasico."
     />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-    <link rel="stylesheet" href="styles.css?v=units-20260601a" />
+    <link rel="stylesheet" href="styles.css?v=focus-20260601a" />
   </head>
   <body>
     <main class="shell" aria-labelledby="page-title">
@@ -26,6 +26,10 @@
         <button class="tab ghost" type="button" data-tab-id="notes">
           <span class="tab-scroll"></span>
           <strong>Tareas</strong>
+        </button>
+        <button class="tab ghost" type="button" data-tab-id="focus">
+          <span class="tab-bottle"></span>
+          <strong>Foco</strong>
         </button>
         <button class="shoulder tab-shift" type="button" data-tab-shift="1" aria-label="Pestaña siguiente">E</button>
       </nav>
@@ -150,6 +154,34 @@
         </aside>
       </section>
 
+      <section class="inventory tab-panel focus-inventory" data-tab-panel="focus" aria-label="Foco semanal" hidden>
+        <div class="notes-grid-area">
+          <span class="section-label">Foco</span>
+          <div class="task-list focus-list" aria-label="Foco de la semana">
+            <div class="task-item" data-focus-row>
+              <input class="task-done" type="checkbox" aria-label="Marcar foco 1" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Foco 1" autocomplete="off" placeholder="" />
+            </div>
+            <div class="task-item" data-focus-row>
+              <input class="task-done" type="checkbox" aria-label="Marcar foco 2" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Foco 2" autocomplete="off" placeholder="" />
+            </div>
+            <div class="task-item" data-focus-row>
+              <input class="task-done" type="checkbox" aria-label="Marcar foco 3" />
+              <span class="task-check" aria-hidden="true"></span>
+              <input class="task-input" type="text" aria-label="Foco 3" autocomplete="off" placeholder="" />
+            </div>
+          </div>
+        </div>
+
+        <aside class="focus-panel" aria-label="Focos de la semana">
+          <span class="section-label">Semana</span>
+          <strong>03</strong>
+        </aside>
+      </section>
+
       <div class="footer-hints" aria-hidden="true">
         <span><b>B</b> Close</span>
         <span><b>A</b> Open</span>
@@ -217,6 +249,6 @@
       </svg>
     </template>
 
-    <script src="script.js?v=units-20260601a"></script>
+    <script src="script.js?v=focus-20260601a"></script>
   </body>
 </html>

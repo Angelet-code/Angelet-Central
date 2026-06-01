@@ -962,6 +962,10 @@ h1 {
   gap: 14px 16px;
 }
 
+.focus-list {
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
 .task-item {
   position: relative;
   display: grid;
@@ -1063,6 +1067,36 @@ h1 {
   letter-spacing: 0;
   outline: 0;
   text-shadow: 2px 2px rgba(255, 244, 205, 0.74);
+}
+
+.focus-panel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: var(--inventory-content-height);
+  min-height: 0;
+  padding: 22px 14px 14px;
+  border-radius: 8px;
+  background: var(--slot-fill);
+  overflow: visible;
+}
+
+.focus-panel .section-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  min-width: 112px;
+  font-size: 12px;
+  transform: translateY(-8px);
+}
+
+.focus-panel strong {
+  color: #090807;
+  font-size: clamp(54px, 7vw, 74px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow: 4px 4px rgba(255, 244, 205, 0.72);
 }
 
 .completed-panel {
@@ -1357,14 +1391,16 @@ h1 {
 
   .apps-panel,
   .wallet,
-  .completed-panel {
+  .completed-panel,
+  .focus-panel {
     min-height: 64px;
   }
 
   .notes-grid-area,
   .markets-grid-area,
   .markets-side-panel,
-  .completed-panel {
+  .completed-panel,
+  .focus-panel {
     height: auto;
   }
 
@@ -1378,6 +1414,10 @@ h1 {
 
   .task-list {
     grid-template-rows: repeat(5, 68px);
+  }
+
+  .focus-list {
+    grid-template-rows: repeat(3, 68px);
   }
 
   .footer-hints {
@@ -1403,7 +1443,7 @@ h1 {
 
   .top-tabs {
     top: 16px;
-    gap: 24px;
+    gap: clamp(8px, 2.6vw, 14px);
   }
 
   .tab {
@@ -1412,7 +1452,8 @@ h1 {
   }
 
   .tab strong {
-    padding-inline: 12px;
+    padding-inline: 6px;
+    font-size: 10px;
   }
 
   .shoulder {
@@ -1548,6 +1589,10 @@ h1 {
     gap: 10px;
   }
 
+  .focus-list {
+    grid-template-rows: repeat(3, 62px);
+  }
+
   .task-item {
     grid-template-columns: 40px minmax(0, 1fr);
     padding: 10px 12px;
@@ -1572,6 +1617,16 @@ h1 {
     height: auto;
     min-height: 126px;
     padding-top: 32px;
+  }
+
+  .focus-panel {
+    height: auto;
+    min-height: 96px;
+    padding-top: 32px;
+  }
+
+  .focus-panel strong {
+    font-size: clamp(42px, 14vw, 58px);
   }
 
   .wallet {

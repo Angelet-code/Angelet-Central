@@ -49,7 +49,8 @@ const apps = [
 const sections = [
   { id: "markets", label: "Mercados" },
   { id: "apps", label: "Apps" },
-  { id: "notes", label: "Tareas" }
+  { id: "notes", label: "Tareas" },
+  { id: "focus", label: "Foco" }
 ];
 
 const marketCards = [
@@ -75,17 +76,22 @@ const marketsGrid = document.querySelector("#markets-grid");
 const marketRefresh = document.querySelector("#market-refresh");
 const marketStatus = document.querySelector("#market-status");
 const marketUpdated = document.querySelector("#market-updated");
-const taskList = document.querySelector(".task-list");
+const taskList = document.querySelector(".notes-inventory .task-list");
 const taskRows = [...document.querySelectorAll("[data-task-row]")];
 const completedTasks = document.querySelector("#completed-tasks");
+const focusList = document.querySelector(".focus-list");
+const focusRows = [...document.querySelectorAll("[data-focus-row]")];
 const selector = document.createElement("div");
 const taskSelector = document.createElement("div");
+const focusSelector = document.createElement("div");
 const notesStorageKey = "angelet-central-notes";
+const focusStorageKey = "angelet-central-focus";
 const marketDataUrl = "data/market-prices.json";
 const marketDataScriptUrl = "data/market-prices.js";
 let activeSectionIndex = sections.findIndex((section) => section.id === "apps");
 let activeSlot = null;
 let activeTaskRow = null;
+let activeFocusRow = null;
 let swipeStart = null;
 let completedTaskItems = [];
 let marketData = null;
@@ -93,6 +99,7 @@ let marketLoadStarted = false;
 
 selector.className = "slot-selector";
 taskSelector.className = "slot-selector task-selector";
+focusSelector.className = "slot-selector task-selector";
 
 const getWrappedSectionIndex = (index) => (index + sections.length) % sections.length;
 
@@ -157,6 +164,29 @@ const refreshTaskSelector = () => {
 
   positionTaskSelector();
   taskSelector.classList.add("is-visible");
+};
+
+const positionFocusSelector = () => {
+  if (!activeFocusRow) return;
+
+  focusSelector.style.width = `${activeFocusRow.offsetWidth}px`;
+  focusSelector.style.height = `${activeFocusRow.offsetHeight}px`;
+  focusSelector.style.transform = `translate3d(${activeFocusRow.offsetLeft}px, ${activeFocusRow.offsetTop}px, 0)`;
+};
+
+const moveFocusSelectorToRow = (row) => {
+  if (!row) return;
+
+  activeFocusRow = row;
+  positionFocusSelector();
+  focusSelector.classList.add("is-visible");
+};
+
+const refreshFocusSelector = () => {
+  if (!activeFocusRow) return;
+
+  positionFocusSelector();
+  focusSelector.classList.add("is-visible");
 };
 
 const formatMarketPrice = (value, decimals) => {
@@ -314,13 +344,20 @@ const setActiveSection = (sectionTarget) => {
 
   if (activeSection.id === "apps") {
     taskSelector.classList.remove("is-visible");
+    focusSelector.classList.remove("is-visible");
     requestAnimationFrame(refreshActiveSelector);
   } else if (activeSection.id === "notes") {
     selector.classList.remove("is-visible");
+    focusSelector.classList.remove("is-visible");
     requestAnimationFrame(refreshTaskSelector);
+  } else if (activeSection.id === "focus") {
+    selector.classList.remove("is-visible");
+    taskSelector.classList.remove("is-visible");
+    requestAnimationFrame(refreshFocusSelector);
   } else {
     selector.classList.remove("is-visible");
     taskSelector.classList.remove("is-visible");
+    focusSelector.classList.remove("is-visible");
     loadMarketData();
   }
 };
@@ -411,6 +448,58 @@ const moveToTaskInput = (row, offset) => {
   const nextIndex = (currentIndex + offset + taskRows.length) % taskRows.length;
 
   focusTaskInput(taskRows[nextIndex]);
+};
+
+const getFocusInput = (row) => row.querySelector(".task-input");
+
+const getFocusCheckbox = (row) => row.querySelector(".task-done");
+
+const getFocusItems = () =>
+  focusRows.map((row) => ({
+    value: getFocusInput(row).value,
+    done: getFocusCheckbox(row).checked
+  }));
+
+const saveFocusState = () => {
+  try {
+    localStorage.setItem(focusStorageKey, JSON.stringify({ items: getFocusItems() }));
+  } catch {
+    // The weekly focus still works if browser storage is unavailable.
+  }
+};
+
+const loadFocusState = () => {
+  let savedState = null;
+
+  try {
+    savedState = JSON.parse(localStorage.getItem(focusStorageKey));
+  } catch {
+    savedState = null;
+  }
+
+  if (!Array.isArray(savedState?.items)) return;
+
+  focusRows.forEach((row, index) => {
+    const item = savedState.items[index] || {};
+    const value = item.value || "";
+
+    getFocusInput(row).value = value;
+    getFocusCheckbox(row).checked = Boolean(item.done && value.trim());
+  });
+};
+
+const focusWeeklyInput = (row) => {
+  const input = getFocusInput(row);
+
+  input.focus();
+  input.setSelectionRange(input.value.length, input.value.length);
+};
+
+const moveToFocusInput = (row, offset) => {
+  const currentIndex = focusRows.indexOf(row);
+  const nextIndex = (currentIndex + offset + focusRows.length) % focusRows.length;
+
+  focusWeeklyInput(focusRows[nextIndex]);
 };
 
 const getTemplateMarkup = (id) => {
@@ -513,7 +602,14 @@ window.addEventListener("resize", () => {
     return;
   }
 
-  positionTaskSelector();
+  if (getActiveSection().id === "notes") {
+    positionTaskSelector();
+    return;
+  }
+
+  if (getActiveSection().id === "focus") {
+    positionFocusSelector();
+  }
 });
 
 tabButtons.forEach((button) => {
@@ -632,10 +728,39 @@ taskRows.forEach((row) => {
   checkbox.addEventListener("change", () => completeTask(row));
 });
 
+focusRows.forEach((row) => {
+  const input = getFocusInput(row);
+  const checkbox = getFocusCheckbox(row);
+
+  row.addEventListener("mouseenter", () => moveFocusSelectorToRow(row));
+  row.addEventListener("focusin", () => moveFocusSelectorToRow(row));
+  input.addEventListener("input", () => {
+    if (!input.value.trim()) checkbox.checked = false;
+    saveFocusState();
+  });
+  input.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== "Tab") return;
+
+    event.preventDefault();
+    moveToFocusInput(row, event.shiftKey ? -1 : 1);
+  });
+
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked && !input.value.trim()) {
+      checkbox.checked = false;
+      input.focus();
+    }
+
+    saveFocusState();
+  });
+});
+
 marketRefresh.addEventListener("click", () => loadMarketData({ force: true }));
 
 taskList.appendChild(taskSelector);
+focusList.appendChild(focusSelector);
 loadNotesState();
+loadFocusState();
 renderMarkets();
 setActiveSection(getSectionFromHash());
 renderGrid();
