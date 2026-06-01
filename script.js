@@ -53,10 +53,10 @@ const sections = [
 ];
 
 const marketCards = [
-  { id: "sp500", label: "S&P 500", symbol: "^SPX", unit: "Indice", decimals: 2, changeDecimals: 2 },
+  { id: "sp500", label: "S&P 500", symbol: "^SPX", unit: "pts", decimals: 2, changeDecimals: 2 },
   { id: "gold", label: "Oro", symbol: "XAUUSD", unit: "USD/oz", decimals: 2, changeDecimals: 2 },
   { id: "btc", label: "Bitcoin", symbol: "BTC/USD", unit: "USD", decimals: 0, changeDecimals: 2 },
-  { id: "eurusd", label: "Euro/Dolar", symbol: "EURUSD", unit: "USD", decimals: 5, changeDecimals: 5 }
+  { id: "eurusd", label: "Euro/Dolar", symbol: "EURUSD", unit: "USD/EUR", decimals: 5, changeDecimals: 5 }
 ];
 
 const totalSlots = 18;
@@ -210,7 +210,10 @@ const renderMarkets = () => {
         <span>${asset.label || card.label}</span>
         <strong>${asset.symbol || card.symbol}</strong>
       </div>
-      <p class="market-price">${hasPrice ? formatMarketPrice(asset.price, card.decimals) : "Sin dato"}</p>
+      <p class="market-price">
+        <span>${hasPrice ? formatMarketPrice(asset.price, card.decimals) : "Sin dato"}</span>
+        ${hasPrice ? `<small>${card.unit}</small>` : ""}
+      </p>
       <p class="market-change">${hasPrice ? formatMarketChange(change, changePercent, card.changeDecimals) : "Pendiente"}</p>
       <div class="market-meta">
         <span>${card.unit}</span>

@@ -783,6 +783,10 @@ h1 {
 
 .market-price {
   align-self: center;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
   margin: 10px 0 6px;
   color: #090807;
   font-size: clamp(28px, 4.8vw, 48px);
@@ -791,6 +795,14 @@ h1 {
   letter-spacing: 0;
   overflow-wrap: anywhere;
   text-shadow: 3px 3px rgba(255, 244, 205, 0.72);
+}
+
+.market-price small {
+  color: var(--muted);
+  font-size: clamp(12px, 1.35vw, 16px);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 1px 1px rgba(255, 244, 205, 0.72);
 }
 
 .market-change {
