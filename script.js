@@ -76,6 +76,7 @@ const marketsGrid = document.querySelector("#markets-grid");
 const marketRefresh = document.querySelector("#market-refresh");
 const marketStatus = document.querySelector("#market-status");
 const marketUpdated = document.querySelector("#market-updated");
+const bottleAppLinks = [...document.querySelectorAll(".bottle-app")];
 const taskList = document.querySelector(".notes-inventory .task-list");
 const taskRows = [...document.querySelectorAll("[data-task-row]")];
 const completedTasks = document.querySelector("#completed-tasks");
@@ -558,7 +559,7 @@ const renderGrid = () => {
 
   grid.appendChild(fragment);
   grid.appendChild(selector);
-  appCount.textContent = String(apps.length).padStart(2, "0");
+  appCount.textContent = String(apps.length + bottleAppLinks.length).padStart(2, "0");
   setActiveApp(apps[0], grid.querySelector(".item-slot[data-filled='true']"));
 };
 

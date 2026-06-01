@@ -9,7 +9,7 @@
       content="Central de aplicaciones de Angelet con estetica de inventario clasico."
     />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-    <link rel="stylesheet" href="styles.css?v=focus-20260601a" />
+    <link rel="stylesheet" href="styles.css?v=hopla-20260602a" />
   </head>
   <body>
     <main class="shell" aria-labelledby="page-title">
@@ -49,9 +49,16 @@
             <section class="bottle-section" aria-label="Botellas">
               <span class="section-label">Bottles</span>
               <div class="bottle-row">
-                <button class="bottle filled red" type="button" aria-label="Botella roja reservada">
-                  <span></span>
-                </button>
+                <a
+                  class="bottle bottle-app"
+                  href="https://hopla.finance/picks/home"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Abrir HOPLA Finance Picks"
+                >
+                  <img class="app-logo bottle-app-logo" src="assets/logos/hopla-finance.svg" alt="" loading="eager" />
+                  <span class="app-name">HF</span>
+                </a>
                 <button class="bottle filled red" type="button" aria-label="Botella roja reservada">
                   <span></span>
                 </button>
@@ -76,7 +83,7 @@
 
           <div class="apps-panel" aria-label="Aplicaciones disponibles">
             <span class="section-label">Apps</span>
-            <strong id="app-count">05</strong>
+            <strong id="app-count">06</strong>
           </div>
 
           <div class="wallet" aria-label="Mis rupias">
@@ -249,6 +256,6 @@
       </svg>
     </template>
 
-    <script src="script.js?v=focus-20260601a"></script>
+    <script src="script.js?v=hopla-20260602a"></script>
   </body>
 </html>

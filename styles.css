@@ -442,7 +442,8 @@ h1 {
   display: none;
 }
 
-.item-slot .app-name {
+.item-slot .app-name,
+.bottle-app .app-name {
   position: absolute;
   right: 6px;
   bottom: 4px;
@@ -590,6 +591,50 @@ h1 {
 
 .bottle.empty::after {
   display: none;
+}
+
+.bottle-app {
+  min-width: 0;
+  padding: 6px;
+  color: #211910;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bottle-app::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  height: 100%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 52%, var(--slot-mark) 0 40%, transparent 41%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.bottle-app-logo {
+  position: relative;
+  z-index: 1;
+  width: 70%;
+  height: 70%;
+  border-radius: 16px;
+  filter: drop-shadow(2px 3px 0 rgba(92, 68, 39, 0.22));
+  transition:
+    filter 0.12s ease,
+    transform 0.12s ease;
+}
+
+.bottle-app:hover .bottle-app-logo,
+.bottle-app:focus-visible .bottle-app-logo {
+  filter: drop-shadow(2px 5px 0 rgba(92, 68, 39, 0.24));
+  transform: translateY(-2px);
+}
+
+.bottle-app:focus-visible {
+  outline: 3px solid rgba(32, 125, 114, 0.75);
+  outline-offset: -3px;
 }
 
 .detail-panel {
