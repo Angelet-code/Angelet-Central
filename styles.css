@@ -357,7 +357,8 @@ h1 {
   z-index: 1;
 }
 
-.item-slot[data-filled="true"]:focus-visible {
+.item-slot:focus,
+.item-slot:focus-visible {
   outline: 0;
 }
 
