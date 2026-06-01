@@ -48,7 +48,15 @@ const apps = [
 
 const sections = [
   { id: "apps", label: "Apps" },
+  { id: "markets", label: "Mercados" },
   { id: "notes", label: "Tareas" }
+];
+
+const marketCards = [
+  { id: "sp500", label: "S&P 500", symbol: "^SPX", unit: "Indice", decimals: 2, changeDecimals: 2 },
+  { id: "gold", label: "Oro", symbol: "XAUUSD", unit: "USD/oz", decimals: 2, changeDecimals: 2 },
+  { id: "btc", label: "Bitcoin", symbol: "BTC/USD", unit: "USD", decimals: 0, changeDecimals: 2 },
+  { id: "eurusd", label: "Euro/Dolar", symbol: "EURUSD", unit: "USD", decimals: 5, changeDecimals: 5 }
 ];
 
 const totalSlots = 18;
@@ -63,17 +71,25 @@ const appCount = document.querySelector("#app-count");
 const detailIcon = document.querySelector("#detail-icon");
 const detailTitle = document.querySelector("#detail-title");
 const detailDescription = document.querySelector("#detail-description");
+const marketsGrid = document.querySelector("#markets-grid");
+const marketRefresh = document.querySelector("#market-refresh");
+const marketStatus = document.querySelector("#market-status");
+const marketUpdated = document.querySelector("#market-updated");
 const taskList = document.querySelector(".task-list");
 const taskRows = [...document.querySelectorAll("[data-task-row]")];
 const completedTasks = document.querySelector("#completed-tasks");
 const selector = document.createElement("div");
 const taskSelector = document.createElement("div");
 const notesStorageKey = "angelet-central-notes";
+const marketDataUrl = "data/market-prices.json";
+const marketDataScriptUrl = "data/market-prices.js";
 let activeSectionIndex = sections.findIndex((section) => section.id === "apps");
 let activeSlot = null;
 let activeTaskRow = null;
 let swipeStart = null;
 let completedTaskItems = [];
+let marketData = null;
+let marketLoadStarted = false;
 
 selector.className = "slot-selector";
 taskSelector.className = "slot-selector task-selector";
@@ -81,6 +97,11 @@ taskSelector.className = "slot-selector task-selector";
 const getWrappedSectionIndex = (index) => (index + sections.length) % sections.length;
 
 const getActiveSection = () => sections[activeSectionIndex];
+
+const getSectionFromHash = () => {
+  const hashId = window.location.hash.replace("#", "");
+  return sections.some((section) => section.id === hashId) ? hashId : "apps";
+};
 
 const positionSelector = () => {
   if (!activeSlot) return;
@@ -133,6 +154,120 @@ const refreshTaskSelector = () => {
   taskSelector.classList.add("is-visible");
 };
 
+const formatMarketPrice = (value, decimals) => {
+  if (!Number.isFinite(value)) return "Sin dato";
+
+  return new Intl.NumberFormat("es-ES", {
+    maximumFractionDigits: decimals,
+    minimumFractionDigits: decimals
+  }).format(value);
+};
+
+const formatMarketChange = (value, percent, decimals = 2) => {
+  if (!Number.isFinite(value) || !Number.isFinite(percent)) return "Sin variacion";
+
+  const signedValue = value > 0 ? `+${formatMarketPrice(value, decimals)}` : formatMarketPrice(value, decimals);
+  const signedPercent = percent > 0 ? `+${formatMarketPrice(percent, 2)}` : formatMarketPrice(percent, 2);
+  return `${signedValue} (${signedPercent}%)`;
+};
+
+const getMarketTimeLabel = (asset) => {
+  if (!asset?.asOf) return "Sin hora";
+
+  return asset.asOf.replace("T", " ").replace("Z", " UTC");
+};
+
+const renderMarkets = () => {
+  const assets = marketData?.assets || {};
+  const fragment = document.createDocumentFragment();
+  let okCount = 0;
+  let staleCount = 0;
+
+  marketCards.forEach((card) => {
+    const asset = assets[card.id] || {};
+    const status = asset.status || "error";
+    const hasPrice = Number.isFinite(asset.price);
+    const item = document.createElement("article");
+    const change = Number(asset.change);
+    const changePercent = Number(asset.changePercent);
+    const trend = change > 0 ? "up" : change < 0 ? "down" : "flat";
+
+    if (status === "ok") okCount += 1;
+    if (status === "stale") staleCount += 1;
+
+    item.className = "market-card";
+    item.dataset.status = status;
+    item.dataset.trend = trend;
+    item.innerHTML = `
+      <div class="market-card-top">
+        <span>${asset.label || card.label}</span>
+        <strong>${asset.symbol || card.symbol}</strong>
+      </div>
+      <p class="market-price">${hasPrice ? formatMarketPrice(asset.price, card.decimals) : "Sin dato"}</p>
+      <p class="market-change">${hasPrice ? formatMarketChange(change, changePercent, card.changeDecimals) : "Pendiente"}</p>
+      <div class="market-meta">
+        <span>${card.unit}</span>
+        <span>${getMarketTimeLabel(asset)}</span>
+      </div>
+    `;
+
+    fragment.appendChild(item);
+  });
+
+  marketsGrid.replaceChildren(fragment);
+
+  if (!marketData) {
+    marketStatus.textContent = "Cargando";
+    marketUpdated.textContent = "Leyendo cotizaciones...";
+    return;
+  }
+
+  if (okCount === marketCards.length) {
+    marketStatus.textContent = "Listo";
+  } else if (okCount + staleCount > 0) {
+    marketStatus.textContent = "Parcial";
+  } else {
+    marketStatus.textContent = "Sin datos";
+  }
+
+  marketUpdated.textContent = marketData.generatedAt
+    ? `Actualizado ${new Date(marketData.generatedAt).toLocaleString("es-ES")}`
+    : "Actualizacion no disponible";
+};
+
+const loadMarketDataScript = () =>
+  new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = `${marketDataScriptUrl}?v=${Date.now()}`;
+    script.async = true;
+    script.onload = () => resolve(window.ANGELET_MARKET_PRICES);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+
+const loadMarketData = async ({ force = false } = {}) => {
+  if (marketLoadStarted && !force) return;
+
+  marketLoadStarted = true;
+  marketStatus.textContent = "Cargando";
+  marketUpdated.textContent = "Leyendo cotizaciones...";
+
+  try {
+    if (window.location.protocol === "file:") {
+      marketData = await loadMarketDataScript();
+    } else {
+      const response = await fetch(`${marketDataUrl}?v=${Date.now()}`, { cache: "no-store" });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      marketData = await response.json();
+    }
+  } catch {
+    marketData = window.ANGELET_MARKET_PRICES || { generatedAt: null, assets: {} };
+  }
+
+  renderMarkets();
+};
+
 const setActiveSection = (sectionTarget) => {
   const nextIndex =
     typeof sectionTarget === "number"
@@ -170,9 +305,13 @@ const setActiveSection = (sectionTarget) => {
   if (activeSection.id === "apps") {
     taskSelector.classList.remove("is-visible");
     requestAnimationFrame(refreshActiveSelector);
-  } else {
+  } else if (activeSection.id === "notes") {
     selector.classList.remove("is-visible");
     requestAnimationFrame(refreshTaskSelector);
+  } else {
+    selector.classList.remove("is-visible");
+    taskSelector.classList.remove("is-visible");
+    loadMarketData();
   }
 };
 
@@ -385,6 +524,8 @@ sectionTabs.addEventListener("keydown", (event) => {
   tabButtons[activeSectionIndex].focus();
 });
 
+window.addEventListener("hashchange", () => setActiveSection(getSectionFromHash()));
+
 shell.addEventListener(
   "pointerdown",
   (event) => {
@@ -438,7 +579,10 @@ taskRows.forEach((row) => {
   checkbox.addEventListener("change", () => completeTask(row));
 });
 
+marketRefresh.addEventListener("click", () => loadMarketData({ force: true }));
+
 taskList.appendChild(taskSelector);
 loadNotesState();
-setActiveSection("apps");
+renderMarkets();
+setActiveSection(getSectionFromHash());
 renderGrid();

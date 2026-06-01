@@ -19,6 +19,10 @@
           <span class="tab-flask"></span>
           <strong>Apps</strong>
         </button>
+        <button class="tab ghost" type="button" data-tab-id="markets">
+          <span class="tab-gem"></span>
+          <strong>Mercados</strong>
+        </button>
         <button class="tab ghost" type="button" data-tab-id="notes">
           <span class="tab-scroll"></span>
           <strong>Tareas</strong>
@@ -79,6 +83,31 @@
               <i></i>
               <i></i>
             </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="inventory tab-panel markets-inventory" data-tab-panel="markets" aria-label="Mercados" hidden>
+        <div class="markets-grid-area">
+          <span class="section-label">Mercados</span>
+          <div id="markets-grid" class="markets-grid" aria-label="Cotizaciones de mercado"></div>
+        </div>
+
+        <aside class="markets-side-panel" aria-label="Estado de cotizaciones">
+          <div class="market-status-card" aria-live="polite">
+            <span class="section-label">Datos</span>
+            <strong id="market-status">Cargando</strong>
+            <p id="market-updated">Leyendo cotizaciones...</p>
+          </div>
+
+          <button id="market-refresh" class="market-refresh" type="button">
+            <span aria-hidden="true">R</span>
+            <strong>Actualizar</strong>
+          </button>
+
+          <div class="market-note">
+            <span class="section-label">Fuente</span>
+            <p>Stooq y CoinGecko. Datos demorados segun cada mercado.</p>
           </div>
         </aside>
       </section>
