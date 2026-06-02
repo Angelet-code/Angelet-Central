@@ -180,8 +180,35 @@ a {
 }
 
 .tab-gem {
-  clip-path: polygon(50% 0, 80% 20%, 80% 72%, 50% 100%, 20% 72%, 20% 20%);
-  background: linear-gradient(90deg, #ac996b 0 35%, #d8c99e 36% 68%, #907e56 69%);
+  position: relative;
+  opacity: 0.88;
+  clip-path: polygon(50% 0, 82% 18%, 91% 50%, 75% 82%, 50% 100%, 25% 82%, 9% 50%, 18% 18%);
+  background:
+    linear-gradient(90deg, #0d6a4f 0 19%, #1ba96f 20% 38%, #b8ffaf 39% 57%, #46cf82 58% 73%, #087052 74% 100%);
+  filter: drop-shadow(2px 3px 0 rgba(61, 45, 24, 0.28));
+}
+
+.tab-gem::before,
+.tab-gem::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.tab-gem::before {
+  inset: 5px 10px 4px;
+  clip-path: polygon(50% 0, 75% 38%, 50% 100%, 25% 38%);
+  background: linear-gradient(90deg, #29b978 0 36%, #e7ffd8 37% 55%, #159164 56% 100%);
+}
+
+.tab-gem::after {
+  left: 12px;
+  top: 9px;
+  width: 8px;
+  height: 20px;
+  background: #f7ffe3;
+  clip-path: polygon(78% 0, 100% 0, 22% 100%, 0 100%);
+  opacity: 0.82;
 }
 
 .tab-bottle {
@@ -1261,9 +1288,36 @@ h1 {
   bottom: 0;
   width: 25px;
   height: 43px;
-  clip-path: polygon(50% 0, 88% 22%, 88% 76%, 50% 100%, 12% 76%, 12% 22%);
-  background: linear-gradient(90deg, #37986a 0 30%, #89d989 31% 62%, #24825d 63%);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
+  clip-path: polygon(50% 0, 86% 18%, 94% 50%, 78% 80%, 50% 100%, 22% 80%, 6% 50%, 14% 18%);
+  background:
+    linear-gradient(90deg, #0d6a4f 0 18%, #21a66f 19% 36%, #aff5a8 37% 56%, #41c980 57% 73%, #087052 74% 100%);
+  box-shadow:
+    0 3px 0 rgba(70, 51, 27, 0.24),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.rupee-stack i::before,
+.rupee-stack i::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.rupee-stack i::before {
+  inset: 5px 7px 4px;
+  clip-path: polygon(50% 0, 76% 38%, 50% 100%, 24% 38%);
+  background: linear-gradient(90deg, #2bc27c 0 35%, #e1ffd4 36% 56%, #178b62 57% 100%);
+}
+
+.rupee-stack i::after {
+  left: 8px;
+  top: 7px;
+  width: 5px;
+  height: 17px;
+  background: #f7ffe3;
+  clip-path: polygon(78% 0, 100% 0, 22% 100%, 0 100%);
+  opacity: 0.82;
 }
 
 .rupee-stack i:nth-child(1) {
@@ -1354,18 +1408,15 @@ h1 {
   stroke-linecap: square;
 }
 
-.money-rupee-shadow { fill: rgba(79, 60, 35, 0.28); }
-.money-rupee-outline { fill: #156f4f; }
-.money-rupee-left { fill: #23a66f; }
-.money-rupee-right { fill: #0f7f5b; }
-.money-rupee-core { fill: #66db92; }
-.money-rupee-top { fill: #d8ffd1; }
-.money-rupee-glint {
+.coin.back { fill: #bf8f38; }
+.coin.front { fill: #e2bc58; }
+.coin-line {
   fill: none;
-  stroke: #f7ffe3;
-  stroke-width: 4;
+  stroke: #6d5123;
+  stroke-width: 5;
   stroke-linecap: square;
 }
+.tiny-rupee { fill: #46bc84; }
 
 .l2e-shadow { fill: rgba(79, 60, 35, 0.22); }
 .l2e-plate { fill: #f4e5bc; }

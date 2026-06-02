@@ -30,6 +30,7 @@ const apps = [
   {
     name: "Cuanto es lo mío?",
     url: "https://angelet-code.github.io/Cuanto-es-lo-mio/",
+    logo: "assets/logos/cuanto-es-lo-mio.jpg",
     icon: "icon-money",
     short: "$",
     description:
