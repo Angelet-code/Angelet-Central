@@ -1354,15 +1354,18 @@ h1 {
   stroke-linecap: square;
 }
 
-.coin.back { fill: #bf8f38; }
-.coin.front { fill: #e2bc58; }
-.coin-line {
+.money-rupee-shadow { fill: rgba(79, 60, 35, 0.28); }
+.money-rupee-outline { fill: #156f4f; }
+.money-rupee-left { fill: #23a66f; }
+.money-rupee-right { fill: #0f7f5b; }
+.money-rupee-core { fill: #66db92; }
+.money-rupee-top { fill: #d8ffd1; }
+.money-rupee-glint {
   fill: none;
-  stroke: #6d5123;
-  stroke-width: 5;
+  stroke: #f7ffe3;
+  stroke-width: 4;
   stroke-linecap: square;
 }
-.tiny-rupee { fill: #46bc84; }
 
 .l2e-shadow { fill: rgba(79, 60, 35, 0.22); }
 .l2e-plate { fill: #f4e5bc; }
