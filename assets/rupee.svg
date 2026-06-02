@@ -35,8 +35,6 @@
   <path fill="url(#leftSide)" d="M4 24v46l11-4V40z" />
   <path fill="url(#rightSide)" d="M60 24 49 40v26l11 4z" />
   <path fill="url(#front)" d="M32 22 49 40v26L32 84 15 66V40z" />
-  <path fill="#e5ff67" opacity=".32" d="M15 40 32 22v62L15 66z" />
-  <path fill="#38b80b" opacity=".22" d="M49 40 32 22v62l17-18z" />
   <path fill="#ecff9b" opacity=".35" d="M9 24 32 4 27 20 15 36z" />
   <path fill="url(#bottomLeft)" d="M4 70 32 96V84L15 66z" />
   <path fill="url(#bottomRight)" d="M60 70 32 96V84l17-18z" />

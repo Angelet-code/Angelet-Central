@@ -181,7 +181,7 @@ a {
 
 .tab-gem {
   opacity: 0.94;
-  background: url("assets/rupee.svg") center / contain no-repeat;
+  background: url("assets/rupee.svg?v=20260602a") center / contain no-repeat;
   filter: drop-shadow(2px 3px 0 rgba(61, 45, 24, 0.28));
 }
 
@@ -1262,7 +1262,7 @@ h1 {
   bottom: 0;
   width: 25px;
   height: 43px;
-  background: url("assets/rupee.svg") center / contain no-repeat;
+  background: url("assets/rupee.svg?v=20260602a") center / contain no-repeat;
   filter: drop-shadow(0 3px 0 rgba(70, 51, 27, 0.24));
 }
 
