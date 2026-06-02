@@ -1511,7 +1511,7 @@ h1 {
   }
 
   .shell {
-    --slot-size: clamp(44px, calc((100vw - 96px) / 4), 72px);
+    --slot-size: calc((100vw - 94px) / 4);
     width: 100%;
     min-height: calc(100svh - 20px);
     padding: 76px 10px 70px;

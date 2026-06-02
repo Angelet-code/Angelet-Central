@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="iconBg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#2f9d86" />
+      <stop offset=".52" stop-color="#173f38" />
+      <stop offset="1" stop-color="#0d2f3d" />
+    </linearGradient>
+    <linearGradient id="front" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#c7ff16" />
+      <stop offset=".5" stop-color="#95f000" />
+      <stop offset="1" stop-color="#63d20a" />
+    </linearGradient>
+    <linearGradient id="topLeft" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f1ffd5" />
+      <stop offset="1" stop-color="#ceff63" />
+    </linearGradient>
+    <linearGradient id="topRight" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#89dd16" />
+      <stop offset="1" stop-color="#57ae0d" />
+    </linearGradient>
+    <linearGradient id="leftSide" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#99e719" />
+      <stop offset="1" stop-color="#67c309" />
+    </linearGradient>
+    <linearGradient id="rightSide" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#60c80e" />
+      <stop offset="1" stop-color="#3fa20a" />
+    </linearGradient>
+    <linearGradient id="bottomLeft" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#4d9d08" />
+      <stop offset="1" stop-color="#2b6f04" />
+    </linearGradient>
+    <linearGradient id="bottomRight" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#44d83a" />
+      <stop offset="1" stop-color="#20aa1f" />
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-20%" width="160%" height="150%">
+      <feDropShadow dx="0" dy="8" stdDeviation="0" flood-color="#2b1f13" flood-opacity=".34" />
+      <feDropShadow dx="0" dy="15" stdDeviation="7" flood-color="#071519" flood-opacity=".28" />
+    </filter>
+    <symbol id="rupee" viewBox="0 0 64 96">
+      <path fill="url(#topLeft)" d="M32 0 4 24l11 16 17-18z" />
+      <path fill="url(#topRight)" d="M32 0v22l17 18 11-16z" />
+      <path fill="url(#leftSide)" d="M4 24v46l11-4V40z" />
+      <path fill="url(#rightSide)" d="M60 24 49 40v26l11 4z" />
+      <path fill="url(#front)" d="M32 22 49 40v26L32 84 15 66V40z" />
+      <path fill="#ecff9b" opacity=".35" d="M9 24 32 4 27 20 15 36z" />
+      <path fill="url(#bottomLeft)" d="M4 70 32 96V84L15 66z" />
+      <path fill="url(#bottomRight)" d="M60 70 32 96V84l17-18z" />
+    </symbol>
+  </defs>
+
+  <rect width="180" height="180" rx="34" fill="url(#iconBg)" />
+  <path fill="#fff7dc" opacity=".16" d="M28 24h124c10 0 18 8 18 18v80c-20-11-38-14-61-8-38 10-62-10-97 6V42c0-10 8-18 16-18z" />
+  <ellipse cx="90" cy="140" rx="58" ry="13" fill="#071519" opacity=".26" />
+  <g filter="url(#shadow)">
+    <use href="#rupee" x="37" y="61" width="54" height="81" opacity=".72" />
+    <use href="#rupee" x="66" y="41" width="58" height="87" />
+    <use href="#rupee" x="96" y="57" width="56" height="84" opacity=".84" />
+  </g>
+  <path fill="#f1ffd5" opacity=".28" d="M26 31c23-12 42-12 61 0-21 4-39 5-61 0z" />
+</svg>
