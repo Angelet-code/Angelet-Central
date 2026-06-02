@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">XTB xStation 5</title>
+  <defs>
+    <linearGradient id="xtb-bg" x1="13" y1="9" x2="86" y2="87" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2a0d0d" />
+      <stop offset="0.6" stop-color="#100b0b" />
+      <stop offset="1" stop-color="#3a1414" />
+    </linearGradient>
+    <linearGradient id="xtb-red" x1="21" y1="19" x2="76" y2="77" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff664f" />
+      <stop offset="1" stop-color="#d70e23" />
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" rx="22" fill="#0d0b0b" />
+  <rect x="6" y="6" width="84" height="84" rx="18" fill="url(#xtb-bg)" />
+  <circle cx="48" cy="36" r="22" fill="url(#xtb-red)" />
+  <path d="M26 61h44" stroke="#ff3345" stroke-width="5" stroke-linecap="round" />
+  <path d="M28 71h26l8-9 8 9" fill="none" stroke="#f8f6f1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".9" />
+  <text x="48" y="43" text-anchor="middle" fill="#ffffff" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="900">XTB</text>
+  <text x="48" y="82" text-anchor="middle" fill="#ffb3ad" font-family="Verdana, Geneva, sans-serif" font-size="8" font-weight="800">xSTATION</text>
+</svg>
