@@ -1511,7 +1511,7 @@ h1 {
   }
 
   .shell {
-    --slot-size: clamp(62px, 20vw, 74px);
+    --slot-size: clamp(44px, calc((100vw - 96px) / 4), 72px);
     width: 100%;
     min-height: calc(100svh - 20px);
     padding: 76px 10px 70px;
@@ -1556,13 +1556,14 @@ h1 {
   }
 
   .item-grid {
-    grid-template-columns: repeat(3, var(--slot-size));
-    gap: 10px;
+    grid-template-columns: repeat(4, var(--slot-size));
+    gap: 8px;
   }
 
   .lower-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(4, var(--slot-size));
+    justify-content: center;
+    gap: 8px;
   }
 
   .bottle-section {
@@ -1571,7 +1572,7 @@ h1 {
   }
 
   .bottle-row {
-    grid-template-columns: repeat(4, minmax(44px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0;
   }
 
