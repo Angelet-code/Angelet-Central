@@ -46,6 +46,36 @@ const apps = [
   }
 ];
 
+const bottleApps = [
+  {
+    id: "hopla-finance",
+    name: "HOPLA Finance",
+    url: "https://hopla.finance/picks/home",
+    logo: "assets/logos/hopla-finance.svg",
+    short: "HF",
+    description:
+      "Acceso directo a HOPLA Finance Picks para consultar ideas y seguimiento de mercado."
+  },
+  {
+    id: "xtb-xstation",
+    name: "XTB xStation 5",
+    url: "https://xstation5.xtb.com/",
+    logo: "assets/logos/xtb-xstation.svg",
+    short: "XTB",
+    description:
+      "Plataforma de trading de XTB para revisar mercados, graficos, posiciones y operaciones."
+  },
+  {
+    id: "kraken-pro",
+    name: "Kraken Pro",
+    url: "https://pro.kraken.com/app/home",
+    logo: "assets/logos/kraken-pro.svg",
+    short: "KR",
+    description:
+      "Terminal avanzada de Kraken para operar criptomonedas y seguir carteras, precios y ordenes."
+  }
+];
+
 const sections = [
   { id: "markets", label: "Mercados" },
   { id: "apps", label: "Apps" },
@@ -78,7 +108,6 @@ const marketsGrid = document.querySelector("#markets-grid");
 const marketRefresh = document.querySelector("#market-refresh");
 const marketStatus = document.querySelector("#market-status");
 const marketUpdated = document.querySelector("#market-updated");
-const bottleAppLinks = [...document.querySelectorAll(".bottle-app")];
 const bottleSlots = [...document.querySelectorAll(".bottle-row .bottle")];
 const taskList = document.querySelector(".notes-inventory .task-list");
 const taskRows = [...document.querySelectorAll("[data-task-row]")];
@@ -92,6 +121,7 @@ const notesStorageKey = "angelet-central-notes";
 const focusStorageKey = "angelet-central-focus";
 const marketDataUrl = "data/market-prices.json";
 const marketDataScriptUrl = "data/market-prices.js";
+const bottleAppsById = new Map(bottleApps.map((app) => [app.id, app]));
 let activeSectionIndex = sections.findIndex((section) => section.id === "apps");
 let activeSlot = null;
 let activeTaskRow = null;
@@ -566,7 +596,7 @@ const renderGrid = () => {
 
   grid.appendChild(fragment);
   appsInventoryGridArea.appendChild(selector);
-  appCount.textContent = String(apps.length + bottleAppLinks.length).padStart(2, "0");
+  appCount.textContent = String(apps.length + bottleApps.length).padStart(2, "0");
   setActiveApp(apps[0], grid.querySelector(".item-slot[data-filled='true']"));
 };
 
@@ -639,8 +669,18 @@ appsInventory.addEventListener("keydown", (event) => {
 });
 
 bottleSlots.forEach((slot) => {
-  slot.addEventListener("mouseenter", () => moveSelectorToSlot(slot));
-  slot.addEventListener("focus", () => moveSelectorToSlot(slot));
+  const bottleApp = bottleAppsById.get(slot.dataset.bottleApp);
+  const activateBottleSlot = () => {
+    if (bottleApp) {
+      setActiveApp(bottleApp, slot);
+      return;
+    }
+
+    moveSelectorToSlot(slot);
+  };
+
+  slot.addEventListener("mouseenter", activateBottleSlot);
+  slot.addEventListener("focus", activateBottleSlot);
 });
 
 window.addEventListener("resize", () => {
