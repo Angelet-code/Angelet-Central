@@ -43,6 +43,14 @@ const apps = [
     short: "L2E",
     description:
       "Diario nutricional personal para registrar comidas, calcular macros en tiempo real y consultar el historico."
+  },
+  {
+    name: "Fruit Guitar",
+    url: "https://angelet-code.github.io/FruitGuitar/",
+    logo: "assets/logos/fruit-guitar-watermelon.png",
+    short: "FG",
+    description:
+      "Juego musical con camara y microfono: toca acordes de guitarra para cortar frutas cuando caen."
   }
 ];
 
