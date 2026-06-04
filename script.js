@@ -45,6 +45,14 @@ const apps = [
       "Diario nutricional personal para registrar comidas, calcular macros en tiempo real y consultar el historico."
   },
   {
+    name: "Left2Eat 2",
+    url: "https://angelet-code.github.io/Left2Eat-v2/",
+    icon: "icon-left2eat",
+    short: "L2E2",
+    description:
+      "Nueva version del diario nutricional para registrar comidas, revisar macros y seguir habitos de alimentacion."
+  },
+  {
     name: "Fruit Guitar",
     url: "https://angelet-code.github.io/FruitGuitar/",
     logo: "assets/logos/fruit-guitar-watermelon.png",
