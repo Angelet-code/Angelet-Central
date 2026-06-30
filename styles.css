@@ -1392,6 +1392,25 @@ h1 {
 .l2e-bar.carbs { fill: #467fd5; }
 .l2e-bar.fat { fill: #46bc84; }
 
+.nairon-shadow { fill: rgba(79, 60, 35, 0.22); }
+.nairon-window { fill: #315f93; }
+.nairon-header { fill: #39b99d; }
+.nairon-field { fill: #f4e5bc; }
+.nairon-lock { fill: #d2a54a; }
+.nairon-loop {
+  fill: none;
+  stroke: #f4e5bc;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nairon-spark {
+  fill: none;
+  stroke: #f5e9c8;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
 @media (max-width: 920px) {
   body {
     align-items: start;

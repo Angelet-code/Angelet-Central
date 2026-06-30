@@ -59,6 +59,14 @@ const apps = [
     short: "FG",
     description:
       "Juego musical con camara y microfono: toca acordes de guitarra para cortar frutas cuando caen."
+  },
+  {
+    name: "Nairon API",
+    url: "https://nairon-api.carlosribes-dev.workers.dev/login",
+    icon: "icon-nairon",
+    short: "NA",
+    description:
+      "Acceso al login de Nairon API desplegado en Cloudflare Workers."
   }
 ];
 
