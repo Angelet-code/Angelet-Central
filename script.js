@@ -63,7 +63,7 @@ const apps = [
   {
     name: "Nairon API",
     url: "https://nairon-api.carlosribes-dev.workers.dev/login",
-    icon: "icon-nairon",
+    logo: "assets/logos/nairon.png",
     short: "NA",
     description:
       "Acceso al login de Nairon API desplegado en Cloudflare Workers."
