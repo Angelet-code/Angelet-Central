@@ -67,6 +67,14 @@ const apps = [
     short: "NA",
     description:
       "Acceso al login de Nairon API desplegado en Cloudflare Workers."
+  },
+  {
+    name: "NODE",
+    url: "https://angelet-code.github.io/NODE/",
+    icon: "icon-node",
+    short: "NODE",
+    description:
+      "App paralela NODE para abrir el panel de trabajo y utilidades del entorno Node."
   }
 ];
 

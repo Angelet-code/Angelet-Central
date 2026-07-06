@@ -1411,6 +1411,17 @@ h1 {
   stroke-linecap: round;
 }
 
+.node-hex-shadow { fill: rgba(79, 60, 35, 0.28); }
+.node-hex { fill: #5dbb72; }
+.node-core { fill: #273d35; }
+.node-link {
+  fill: none;
+  stroke: #f4e5bc;
+  stroke-width: 5;
+  stroke-linecap: square;
+}
+.node-dot { fill: #e6c65e; }
+
 @media (max-width: 920px) {
   body {
     align-items: start;
